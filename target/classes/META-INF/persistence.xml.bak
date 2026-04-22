@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+                                 https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <persistence-unit name="muhasebePU" transaction-type="JTA">
+
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>oo
+
+        <jta-data-source>java:/MuhasebeDS</jta-data-source>
+
+        <!-- Tum entity'leri acikca listele (EclipseLink weaving kapali oldugu icin) -->
+        <class>com.muhasebe.category.domain.CategoryEntity</class>
+        <class>com.muhasebe.category.domain.CategoryDetailsEntity</class>
+        <class>com.muhasebe.product.domain.ProductEntity</class>
+        <class>com.muhasebe.tablemap.domain.TableMapEntity</class>
+        <class>com.muhasebe.tablemap.domain.ViewMap</class>
+        <class>com.muhasebe.tablemap.domain.DynamicProcedureEntity</class>
+
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+        <properties>
+            <property name="eclipselink.target-database" value="PostgreSQL"/>
+            <property name="eclipselink.target-server" value="JBoss"/>
+            <property name="eclipselink.ddl-generation" value="none"/>
+            <property name="eclipselink.logging.level" value="INFO"/>
+            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
+            <property name="eclipselink.cache.shared.default" value="false"/>
+            <property name="eclipselink.weaving" value="static"/>
+        </properties>
+
+    </persistence-unit>
+
+</persistence>

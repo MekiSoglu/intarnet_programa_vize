@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Tablo Yonetimi</ui:define>
+
+    <ui:define name="content">
+        <h2>Tablo Yonetimi</h2>
+
+        <h:form id="createForm">
+
+            <!-- Tablo Silme -->
+            <div class="panel">
+                <h3>Tablo Sil</h3>
+                <p:selectOneMenu value="#{tableCreateBean.tableToDelete}">
+                    <f:selectItem itemLabel="-- Silinecek tabloyu sec --" itemValue=""/>
+                    <f:selectItems value="#{tableCreateBean.existingTables}"/>
+                </p:selectOneMenu>
+                &#160;
+                <p:commandButton value="Sil" action="#{tableCreateBean.deleteSelectedTable}"
+                                 styleClass="btn btn-danger"
+                                 update=":createForm :growl">
+                    <p:confirm header="Onay" message="Tablo ve icindeki tum veriler silinecek. Emin misin?"/>
+                </p:commandButton>
+            </div>
+
+            <!-- Yeni Tablo -->
+            <div class="panel">
+                <h3>Yeni Tablo Olustur</h3>
+                <div class="field">
+                    <label>Tablo Adi:</label>
+                    <p:inputText value="#{tableCreateBean.tableName}" required="true" size="40"
+                                 placeholder="orn: beko_loder, banka, musteri"/>
+                </div>
+
+                <div class="field">
+                    <label>Bagli Kategori (opsiyonel):</label>
+                    <p:selectOneMenu value="#{tableCreateBean.selectedCategoryId}" style="min-width:300px;">
+                        <f:selectItem itemLabel="-- Kategorisiz --" itemValue="#{null}"/>
+                        <f:selectItems value="#{tableCreateBean.allCategories}" var="c"
+                                       itemLabel="#{tableCreateBean.getCategoryPath(c)}"
+                                       itemValue="#{c.id}"/>
+                    </p:selectOneMenu>
+                    <small style="color:#666;display:block;margin-top:4px;">
+                        Bu tabloyu bir kategoriye baglayabilirsin (orn: Arac &gt; Makina &gt; Kepce).
+                    </small>
+                </div>
+
+                <h4>Kolonlar</h4>
+                <p:dataTable value="#{tableCreateBean.columns}" var="col" id="columnsTable" rowIndexVar="idx">
+                    <p:column headerText="#" style="width:40px">#{idx + 1}</p:column>
+                    <p:column headerText="Kolon Adi">
+                        <p:inputText value="#{col.key}" size="25"/>
+                    </p:column>
+                    <p:column headerText="Tip">
+                        <p:selectOneMenu value="#{col.type}">
+                            <f:selectItems value="#{tableCreateBean.availableTypes}"/>
+                            <p:ajax event="change" update="columnsTable"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column headerText="Enum Degerleri (virgulle)">
+                        <p:inputText value="#{col.enumValues}" size="30"
+                                     rendered="#{col.enum}"
+                                     placeholder="orn: odenmedi,odendi"/>
+                        <h:outputText value="—" rendered="#{not col.enum}" style="color:#888;"/>
+                    </p:column>
+                    <p:column headerText="Default (opsiyonel)">
+                        <p:inputText value="#{col.defaultValue}" size="15"
+                                     rendered="#{col.enum}"
+                                     placeholder="bos=ilk deger"/>
+                        <h:outputText value="—" rendered="#{not col.enum}" style="color:#888;"/>
+                    </p:column>
+                    <p:column headerText="Islem" style="width:80px">
+                        <p:commandButton icon="pi pi-times" styleClass="btn-danger btn-sm"
+                                         action="#{tableCreateBean.removeColumn(col)}"
+                                         update="columnsTable" process="@form"/>
+                    </p:column>
+                </p:dataTable>
+                <p:commandButton value="+ Kolon Ekle" action="#{tableCreateBean.addColumn}"
+                                 update="columnsTable" process="@form" styleClass="btn btn-secondary"/>
+
+                <h4>Foreign Key'ler (Iliskiler)</h4>
+                <p:dataTable value="#{tableCreateBean.foreignKeys}" var="fk" id="fkTable">
+                    <p:column headerText="Iliski Tipi">
+                        <p:selectOneMenu value="#{fk.relation}">
+                            <f:selectItems value="#{tableCreateBean.relationTypes}"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column headerText="Hedef Tablo">
+                        <p:selectOneMenu value="#{fk.references}">
+                            <f:selectItem itemLabel="-- Sec --" itemValue=""/>
+                            <f:selectItems value="#{tableCreateBean.existingTables}"/>
+                            <p:ajax event="change" update="fkTable"
+                                    listener="#{tableCreateBean.onFkTargetChange(fk)}"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column headerText="FK Kolon (1-N icin)">
+                        <p:inputText value="#{fk.column}" size="20"
+                                     placeholder="orn: firma_id"/>
+                    </p:column>
+                    <p:column headerText="Display Kolon">
+                        <p:selectOneMenu value="#{fk.relationColumn}">
+                            <f:selectItem itemLabel="-- Once hedef tablo sec --" itemValue=""/>
+                            <f:selectItems value="#{tableCreateBean.getColumnsForFk(fk)}"/>
+                        </p:selectOneMenu>
+                    </p:column>
+                    <p:column headerText="Islem" style="width:80px">
+                        <p:commandButton icon="pi pi-times" styleClass="btn-danger btn-sm"
+                                         action="#{tableCreateBean.removeForeignKey(fk)}"
+                                         update="fkTable" process="@form"/>
+                    </p:column>
+                </p:dataTable>
+                <p:commandButton value="+ FK Ekle" action="#{tableCreateBean.addForeignKey}"
+                                 update="fkTable" process="@form" styleClass="btn btn-secondary"/>
+
+                <div class="actions">
+                    <p:commandButton value="Tabloyu Olustur" action="#{tableCreateBean.createTable}"
+                                     styleClass="btn btn-success" ajax="false"/>
+                    <h:link outcome="/pages/tables/list.xhtml" value="Iptal" styleClass="btn"/>
+                </div>
+            </div>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Evet, sil" type="button" styleClass="btn btn-danger ui-confirmdialog-yes"/>
+                <p:commandButton value="Vazgec" type="button" styleClass="btn ui-confirmdialog-no"/>
+            </p:confirmDialog>
+        </h:form>
+
+        <div class="hint">
+            <strong>Ipucu:</strong>
+            <ul>
+                <li>Kolon adlarinda Turkce karakter kullanabilirsin - otomatik normalize edilecek.</li>
+                <li>Para/tutar icin <code>decimal</code> tipini sec (NUMERIC(19,4) olacak).</li>
+                <li>many-to-many iliskisinde FK Kolon alanini bos birak.</li>
+                <li>Display Kolon = UI'da gosterilecek alan (orn: ad, urun_adi) — hedef tablo secildikten sonra listelenir.</li>
+                <li><strong>Enum</strong> tipi: sadece belirli degerleri kabul eden kolon. Orn: <code>durum</code> kolonu sadece "odenmedi" veya "odendi" alabilsin — "Enum Degerleri" kutusuna <code>odenmedi,odendi</code> yaz, "Default" bos birakirsan ilk deger default olur.</li>
+            </ul>
+        </div>
+    </ui:define>
+
+</ui:composition>
+</html>

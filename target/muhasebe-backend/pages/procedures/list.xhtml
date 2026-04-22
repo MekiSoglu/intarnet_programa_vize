@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Procedure'ler</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h2>Dinamik Procedure'ler (Islemler)</h2>
+            <h:link outcome="/pages/procedures/create.xhtml" value="+ Yeni Procedure"
+                    styleClass="btn btn-primary"/>
+        </div>
+
+        <h:form id="procForm">
+            <p:dataTable value="#{procedureExecuteBean.allProcedures}" var="p"
+                         emptyMessage="Henuz procedure yok" styleClass="app-table">
+                <p:column headerText="Procedure Adi">
+                    <h:outputText value="#{p.procedureName}"/>
+                </p:column>
+                <p:column headerText="Olusturma">
+                    <h:outputText value="#{p.createdDate}"/>
+                </p:column>
+                <p:column headerText="Islem" style="width:220px">
+                    <h:link outcome="/pages/procedures/execute.xhtml" value="Calistir"
+                            styleClass="btn btn-sm btn-primary">
+                        <f:param name="name" value="#{p.procedureName}"/>
+                    </h:link>
+                    &#160;
+                    <p:commandButton value="Sil" styleClass="btn btn-sm btn-danger"
+                                     action="#{procedureExecuteBean.deleteProcedure(p.procedureName)}"
+                                     update=":procForm :growl">
+                        <p:confirm header="Onay" message="Procedure silinsin mi?"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Evet" type="button" styleClass="btn btn-danger ui-confirmdialog-yes"/>
+                <p:commandButton value="Hayir" type="button" styleClass="btn ui-confirmdialog-no"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

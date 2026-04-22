@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Carilerim</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h2>Carilerim (View'ler)</h2>
+            <h:link outcome="/pages/views/create.xhtml" value="+ Yeni Cari"
+                    styleClass="btn btn-primary"/>
+        </div>
+
+        <h:form id="viewForm">
+            <p:dataTable value="#{viewCreateBean.existingViews}" var="v" emptyMessage="Henuz cari yok"
+                         styleClass="app-table">
+                <p:column headerText="Cari Adi">
+                    <h:outputText value="#{v.viewName}"/>
+                </p:column>
+                <p:column headerText="Iliskili Tablolar">
+                    <h:outputText value="#{v.relationTableName}"/>
+                </p:column>
+                <p:column headerText="Olusturma">
+                    <h:outputText value="#{v.createdDate}"/>
+                </p:column>
+                <p:column headerText="Islem" style="width:220px">
+                    <h:link outcome="/pages/views/data.xhtml" value="Goster" styleClass="btn btn-sm">
+                        <f:param name="view" value="#{v.viewName}"/>
+                    </h:link>
+                    &#160;
+                    <p:commandButton value="Sil" styleClass="btn btn-sm btn-danger"
+                                     action="#{viewCreateBean.deleteView(v.viewName)}"
+                                     update=":viewForm :growl">
+                        <p:confirm header="Onay" message="Cari silinsin mi?"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Evet" type="button" styleClass="btn btn-danger ui-confirmdialog-yes"/>
+                <p:commandButton value="Hayir" type="button" styleClass="btn ui-confirmdialog-no"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

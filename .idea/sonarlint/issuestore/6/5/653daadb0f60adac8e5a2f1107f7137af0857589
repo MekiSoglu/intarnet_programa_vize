@@ -1,0 +1,19 @@
+
+{	java:S135³"YReduce the total number of break and continue statements in this loop to use at most one.(“·Í¡ûÿÿÿÿ8ƒçÙáÚ3
+{	java:S135Í"YReduce the total number of break and continue statements in this loop to use at most one.(Œ«¦Ñøÿÿÿÿ8„çÙáÚ3
+o
+java:S1192W"MDefine a constant instead of duplicating this literal "INSERT INTO " 3 times.(ÜÂá´ùÿÿÿÿ8…çÙáÚ3
+g
+java:S1192F"JDefine a constant instead of duplicating this literal "Kolon adi" 3 times.(ÇĞÓ8†çÙáÚ3
+g
+java:S11920"JDefine a constant instead of duplicating this literal "Tablo adi" 5 times.(ú¦†ñ8‡çÙáÚ3
+i
+java:S1192;"MDefine a constant instead of duplicating this literal "many-to-many" 3 times.(ùé—o8‹çÙáÚ3
+n
+java:S1192×"PDefine a constant instead of duplicating this literal " WHERE id = :id" 3 times.(ºÀøš8ŒçÙáÚ3
+t
+java:S3776."RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ºÚ¤Úøÿÿÿÿ8ŒçÙáÚ3
+i
+java:S6201Ÿ"FReplace this instanceof check and cast with 'instanceof Number number'(øÓö‰ûÿÿÿÿ8ÅçÙáÚ3
+p
+java:S3776°"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(´èò’8ÆçÙáÚ3

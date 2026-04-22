@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Islem Calistir</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h2>Islem: #{procedureExecuteBean.procedureName}</h2>
+            <h:link outcome="/pages/procedures/list.xhtml" value="&lt; Islemlerim" styleClass="btn"/>
+        </div>
+
+        <h:form id="execForm">
+
+            <div class="panel">
+                <h3>1. Etkilenecek Tablolar</h3>
+                <p class="hint">Islemin etki edecegi tabloyu secin, icinden bir satir secin.</p>
+            </div>
+
+            <ui:repeat value="#{procedureExecuteBean.affectedTables}" var="tbl">
+                <div class="panel">
+                    <div class="page-header">
+                        <h3>#{tbl}
+                            <h:outputText value=" (satir #{procedureExecuteBean.selectedRows[tbl]} secildi)"
+                                          rendered="#{not empty procedureExecuteBean.selectedRows[tbl]}"
+                                          style="color:#27ae60;font-weight:normal;"/>
+                        </h3>
+                        <p:commandButton value="Tabloyu Kaldir" styleClass="btn btn-sm btn-danger"
+                                         action="#{procedureExecuteBean.removeTablePick(tbl)}"
+                                         update=":execForm" process="@this"/>
+                    </div>
+
+                    <p:dataTable value="#{procedureExecuteBean.tableData[tbl]}" var="row"
+                                 styleClass="app-table" paginator="true" rows="5"
+                                 emptyMessage="Veri yok">
+                        <p:columns value="#{procedureExecuteBean.tableColumns[tbl]}" var="col">
+                            <f:facet name="header">#{col}</f:facet>
+                            #{row[col]}
+                        </p:columns>
+                        <p:column headerText="Sec" style="width:80px">
+                            <p:commandButton value="#{procedureExecuteBean.isRowSelected(tbl, row) ? 'Secili' : 'Sec'}"
+                                             styleClass="btn btn-sm #{procedureExecuteBean.isRowSelected(tbl, row) ? 'btn-success' : ''}"
+                                             action="#{procedureExecuteBean.pickRow(tbl, row['id'])}"
+                                             update=":execForm" process="@this"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </ui:repeat>
+
+            <div class="panel">
+                <h4>Yeni Tablo Ekle</h4>
+                <div class="field-inline">
+                    <p:inputText id="newTblInput" value="#{procedureExecuteBean.tableNameToLoad}"
+                                 placeholder="Tablo adi (orn: borclar)" size="25"/>
+                    &#160;
+                    <p:commandButton value="+ Tabloyu Yukle"
+                                     action="#{procedureExecuteBean.selectTable(procedureExecuteBean.tableNameToLoad)}"
+                                     update=":execForm"
+                                     process="@this newTblInput"/>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>2. Input Degerleri</h3>
+
+                <ui:repeat value="#{procedureExecuteBean.inputValues.keySet().toArray()}" var="inputKey">
+                    <div class="field-inline" style="margin-bottom: 10px;">
+                        <label style="font-weight: bold; min-width: 120px; display: inline-block;">#{inputKey}:</label>
+                        <p:inputText value="#{procedureExecuteBean.inputValues[inputKey]}" size="20" placeholder="Deger girin"/>
+                        &#160;
+                        <p:commandButton icon="pi pi-times" styleClass="btn-danger btn-sm"
+                                         action="#{procedureExecuteBean.removeInput(inputKey)}"
+                                         update=":execForm" process="@this"/>
+                    </div>
+                </ui:repeat>
+
+                <div style="margin-top:12px; border-top: 1px solid #eee; pt: 10px;">
+                    <p:inputText id="newInpInput" value="#{procedureExecuteBean.inputNameToAdd}"
+                                 placeholder="Parametre adi (orn: odenen_tutar)"/>
+                    &#160;
+                    <p:commandButton value="+ Parametre Ekle"
+                                     action="#{procedureExecuteBean.addInputFromForm}"
+                                     update=":execForm"
+                                     process="@this newInpInput"/>
+                </div>
+            </div>
+
+            <div class="actions" style="margin-top: 20px;">
+                <p:commandButton value="Islemi Simdi Calistir" action="#{procedureExecuteBean.execute}"
+                                 update=":execForm :growl" styleClass="btn btn-success"
+                                 icon="pi pi-play"/>
+            </div>
+        </h:form>
+
+        <div class="hint">
+            <strong>Nasil kullanilir:</strong>
+            <ul>
+                <li>Once <strong>"Tablo Ekle"</strong> kismindan islemin etkileyecegi tablolari (orn: kredi, hesap) yukleyin.</li>
+                <li>Tablo listesinden ilgili satirin yanindaki <strong>"Sec"</strong> butonuna tiklayin.</li>
+                <li>Ardindan <strong>"Parametre Ekle"</strong> kismindan procedure'de tanimladiginiz (orn: odenen_tutar) adini girin.</li>
+                <li>Son olarak degeri yazip <strong>"Islemi Calistir"</strong> butonuna basin.</li>
+            </ul>
+        </div>
+    </ui:define>
+
+</ui:composition>
+</html>

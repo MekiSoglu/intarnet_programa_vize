@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Muhasebe - Dashboard</ui:define>
+
+    <ui:define name="content">
+        <div class="hero">
+            <h1>Dinamik Muhasebe Sistemi</h1>
+            <p>Kod yazmadan tablolar olusturup islem tanimlayabilirsin.</p>
+        </div>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">Kategori</div>
+                <div class="stat-value">#{homeBean.categoryCount}</div>
+            </div>
+
+            <div class="stat-card accent-orange">
+                <div class="stat-label">Dinamik Tablo</div>
+                <div class="stat-value">#{homeBean.tableCount}</div>
+            </div>
+            <div class="stat-card accent-purple">
+                <div class="stat-label">Cari (View)</div>
+                <div class="stat-value">#{homeBean.viewCount}</div>
+            </div>
+            <div class="stat-card accent-red">
+                <div class="stat-label">Islem (Procedure)</div>
+                <div class="stat-value">#{homeBean.procedureCount}</div>
+            </div>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>Tablolar</h3>
+                <p>Yeni tablolar olustur, iliskilendir ve veri yonet.</p>
+                <h:link outcome="/pages/tables/list.xhtml" value="Git &#187;" styleClass="btn-link"/>
+            </div>
+            <div class="card">
+                <h3>Cari'ler (View'ler)</h3>
+                <p>Birden fazla tabloyu birlestiren dinamik sorgular.</p>
+                <h:link outcome="/pages/views/list.xhtml" value="Git &#187;" styleClass="btn-link"/>
+            </div>
+            <div class="card">
+                <h3>Islemler (Procedure'ler)</h3>
+                <p>Tablolar arasi otomatik islemler (borc odeme, stok dusurme...).</p>
+                <h:link outcome="/pages/procedures/list.xhtml" value="Git &#187;" styleClass="btn-link"/>
+            </div>
+            <div class="card">
+                <h3>Araclar / Kategoriler</h3>
+                <p>Hiyerarsik kategori agaci ve her kategorinin tablo + verileri.</p>
+                <h:link outcome="/pages/categories/araclar.xhtml" value="Git &#187;" styleClass="btn-link"/>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Tablolar</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h2>Dinamik Tablolar</h2>
+            <h:link outcome="/pages/tables/create.xhtml" value="+ Yeni Tablo" styleClass="btn btn-primary"/>
+        </div>
+
+        <h:form id="listForm">
+            <p:dataTable value="#{tableListBean.tables}" var="t" emptyMessage="Henuz tablo yok"
+                         styleClass="app-table">
+                <p:column headerText="Tablo Adi">
+                    <h:outputText value="#{t}"/>
+                </p:column>
+                <p:column headerText="Islemler" style="width: 300px">
+                    <h:link outcome="/pages/tables/data.xhtml" value="Veri" styleClass="btn btn-sm">
+                        <f:param name="table" value="#{t}"/>
+                    </h:link>
+                    &#160;
+                    <p:commandButton value="Sil" styleClass="btn btn-sm btn-danger"
+                                     action="#{tableListBean.deleteTable(t)}"
+                                     update=":listForm :growl"
+                                     process="@this">
+                        <p:confirm header="Onay" message="Silinsin mi? Bu islem geri alinamaz."/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Evet, sil" type="button" styleClass="btn btn-danger ui-confirmdialog-yes"/>
+                <p:commandButton value="Vazgec" type="button" styleClass="btn ui-confirmdialog-no"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

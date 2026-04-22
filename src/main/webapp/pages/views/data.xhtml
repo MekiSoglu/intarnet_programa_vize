@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Cari Verisi</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h2>Cari: #{viewDataBean.viewName}</h2>
+            <h:link outcome="/pages/views/list.xhtml" value="&lt; Carilerim" styleClass="btn"/>
+        </div>
+
+        <h:form id="vForm">
+            <div class="panel">
+                <h4>Filtrele</h4>
+                <div class="field-inline">
+                    <p:selectOneMenu value="#{viewDataBean.filterColumn}">
+                        <f:selectItem itemLabel="-- Kolon sec --" itemValue=""/>
+                        <f:selectItems value="#{viewDataBean.columns}"/>
+                    </p:selectOneMenu>
+                    &#160;
+                    <p:inputText value="#{viewDataBean.filterValue}" placeholder="Deger"/>
+                    &#160;
+                    <p:commandButton value="Filtrele" action="#{viewDataBean.filter}"
+                                     update="vForm" styleClass="btn btn-primary"/>
+                    <p:commandButton value="Temizle" action="#{viewDataBean.clearFilter}"
+                                     update="vForm" styleClass="btn"/>
+                </div>
+            </div>
+
+            <p:dataTable value="#{viewDataBean.rows}" var="row" emptyMessage="Kayit yok"
+                         styleClass="app-table" paginator="true" rows="20">
+                <p:columns value="#{viewDataBean.columns}" var="col">
+                    <f:facet name="header">#{col}</f:facet>
+                    <h:outputText value="#{row[col]}"/>
+                </p:columns>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

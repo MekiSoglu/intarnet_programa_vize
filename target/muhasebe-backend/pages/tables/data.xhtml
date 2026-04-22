@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Tablo Verisi</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h2>Tablo: #{tableDataBean.tableName}</h2>
+            <h:link outcome="/pages/tables/list.xhtml" value="&lt; Geri" styleClass="btn"/>
+        </div>
+
+        <h:form id="dataForm">
+            <!-- Yeni kayit formu -->
+            <div class="panel">
+                <h3>Yeni Kayit Ekle</h3>
+                <div class="form-row">
+                    <ui:repeat value="#{tableDataBean.columns}" var="col">
+                        <h:panelGroup rendered="#{!tableDataBean.isSystemCol(col)}" styleClass="field-inline">
+                            <label>#{col}</label>
+
+                            <!-- FK kolonu: dropdown -->
+                            <p:selectOneMenu value="#{tableDataBean.newRow[col]}"
+                                             rendered="#{tableDataBean.isForeignKey(col)}">
+                                <f:selectItem itemLabel="-- Sec --" itemValue=""/>
+                                <f:selectItems value="#{tableDataBean.getOptionsFor(col)}" var="opt"
+                                               itemLabel="#{opt.value}" itemValue="#{opt.id}"/>
+                            </p:selectOneMenu>
+
+                            <!-- Enum kolonu: dropdown -->
+                            <p:selectOneMenu value="#{tableDataBean.newRow[col]}"
+                                             rendered="#{!tableDataBean.isForeignKey(col) and tableDataBean.isEnumCol(col)}">
+                                <f:selectItem itemLabel="-- Sec --" itemValue=""/>
+                                <f:selectItems value="#{tableDataBean.getEnumValuesOf(col)}"/>
+                            </p:selectOneMenu>
+
+                            <!-- Boolean: dropdown -->
+                            <p:selectOneMenu value="#{tableDataBean.newRow[col]}"
+                                             rendered="#{!tableDataBean.isForeignKey(col) and !tableDataBean.isEnumCol(col) and tableDataBean.isBooleanCol(col)}">
+                                <f:selectItem itemLabel="-- Sec --" itemValue=""/>
+                                <f:selectItem itemLabel="True" itemValue="true"/>
+                                <f:selectItem itemLabel="False" itemValue="false"/>
+                            </p:selectOneMenu>
+
+                            <!-- Date: date input -->
+                            <p:inputText value="#{tableDataBean.newRow[col]}" size="15"
+                                         rendered="#{!tableDataBean.isForeignKey(col) and !tableDataBean.isEnumCol(col) and !tableDataBean.isBooleanCol(col) and tableDataBean.isDateCol(col)}"
+                                         type="date"/>
+
+                            <!-- Normal: text input -->
+                            <p:inputText value="#{tableDataBean.newRow[col]}" size="20"
+                                         rendered="#{!tableDataBean.isForeignKey(col) and !tableDataBean.isEnumCol(col) and !tableDataBean.isBooleanCol(col) and !tableDataBean.isDateCol(col)}"/>
+                        </h:panelGroup>
+                    </ui:repeat>
+                </div>
+                <p:commandButton value="Ekle" action="#{tableDataBean.addRow}"
+                                 update="dataForm :growl" styleClass="btn btn-primary"/>
+            </div>
+
+            <!-- Mevcut veriler -->
+            <h3>Veriler</h3>
+            <p:dataTable value="#{tableDataBean.rows}" var="row" emptyMessage="Kayit yok"
+                         styleClass="app-table">
+                <p:columns value="#{tableDataBean.columns}" var="col">
+                    <f:facet name="header">#{col}</f:facet>
+                    <h:outputText value="#{row[col]}"/>
+                </p:columns>
+                <p:column headerText="Islem" style="width:160px">
+                    <p:commandButton icon="pi pi-pencil" styleClass="btn btn-sm"
+                                     action="#{tableDataBean.prepareEdit(row)}"
+                                     update=":dataForm:editDialog" oncomplete="PF('editDlg').show()"/>
+                    &#160;
+                    <p:commandButton icon="pi pi-trash" styleClass="btn btn-sm btn-danger"
+                                     action="#{tableDataBean.deleteRow(row)}"
+                                     update=":dataForm :growl">
+                        <p:confirm header="Onay" message="Kayit silinsin mi?"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+            <!-- Duzenleme dialog -->
+            <p:dialog header="Kayit Duzenle" widgetVar="editDlg" modal="true" width="500">
+                <h:panelGroup id="editDialog" rendered="#{tableDataBean.editing}">
+                    <ui:repeat value="#{tableDataBean.columns}" var="col">
+                        <h:panelGroup rendered="#{!tableDataBean.isSystemCol(col)}" layout="block" styleClass="field">
+                            <label>#{col}</label>
+
+                            <!-- FK kolonu: dropdown -->
+                            <p:selectOneMenu value="#{tableDataBean.editRow[col]}"
+                                             rendered="#{tableDataBean.isForeignKey(col)}">
+                                <f:selectItem itemLabel="-- Sec --" itemValue=""/>
+                                <f:selectItems value="#{tableDataBean.getOptionsFor(col)}" var="opt"
+                                               itemLabel="#{opt.value}" itemValue="#{opt.id}"/>
+                            </p:selectOneMenu>
+
+                            <!-- Enum kolonu: dropdown -->
+                            <p:selectOneMenu value="#{tableDataBean.editRow[col]}"
+                                             rendered="#{!tableDataBean.isForeignKey(col) and tableDataBean.isEnumCol(col)}">
+                                <f:selectItem itemLabel="-- Sec --" itemValue=""/>
+                                <f:selectItems value="#{tableDataBean.getEnumValuesOf(col)}"/>
+                            </p:selectOneMenu>
+
+                            <!-- Normal: text input -->
+                            <p:inputText value="#{tableDataBean.editRow[col]}" size="40"
+                                         rendered="#{!tableDataBean.isForeignKey(col) and !tableDataBean.isEnumCol(col)}"/>
+                        </h:panelGroup>
+                    </ui:repeat>
+                    <div class="actions">
+                        <p:commandButton value="Kaydet" action="#{tableDataBean.saveEdit}"
+                                         update=":dataForm :growl"
+                                         oncomplete="PF('editDlg').hide()" styleClass="btn btn-primary"/>
+                        <p:commandButton value="Iptal" action="#{tableDataBean.cancelEdit}"
+                                         oncomplete="PF('editDlg').hide()" styleClass="btn"/>
+                    </div>
+                </h:panelGroup>
+            </p:dialog>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Evet" type="button" styleClass="btn btn-danger ui-confirmdialog-yes"/>
+                <p:commandButton value="Hayir" type="button" styleClass="btn ui-confirmdialog-no"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html" encoding="UTF-8">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title><ui:insert name="title">Muhasebe</ui:insert></title>
+    <h:outputStylesheet name="css/app.css"/>
+</h:head>
+
+<h:body>
+
+<div class="app-layout">
+
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar">
+        <div class="brand">
+            <h:link outcome="/index.xhtml">
+                <span class="brand-icon">&#128202;</span>
+                <span class="brand-text">Muhasebe</span>
+            </h:link>
+        </div>
+
+        <nav class="sidenav">
+            <ul>
+                <li>
+                    <h:link outcome="/index.xhtml">
+                        <span class="icon">&#127968;</span> Home
+                    </h:link>
+                </li>
+
+                <!-- Category grubu -->
+                <li class="group">
+                    <div class="group-header" onclick="toggleSub(this)">
+                        <span class="icon">&#128193;</span> Category
+                        <span class="arrow">&#9662;</span>
+                    </div>
+                    <ul class="submenu">
+                        <li><h:link outcome="/pages/categories/list.xhtml" value="Create Category"/></li>
+                        <li><h:link outcome="/pages/categories/details.xhtml" value="Create Details"/></li>
+                    </ul>
+                </li>
+
+
+
+                <li>
+                    <h:link outcome="/pages/categories/araclar.xhtml">
+                        <span class="icon">&#128663;</span> Arac / Kategoriler
+                    </h:link>
+                </li>
+
+                <!-- Dinamik Tablolar grubu -->
+                <li>
+                    <h:link outcome="/pages/tables/create.xhtml">
+                        <span class="icon">&#128202;</span> Create Table
+                    </h:link>
+                </li>
+
+                <li>
+                    <h:link outcome="/pages/tables/list.xhtml">
+                        <span class="icon">&#128203;</span> Tablolarim
+                    </h:link>
+                </li>
+
+                <!-- Cari (View) grubu -->
+                <li class="group">
+                    <div class="group-header" onclick="toggleSub(this)">
+                        <span class="icon">&#129534;</span> Cari
+                        <span class="arrow">&#9662;</span>
+                    </div>
+                    <ul class="submenu">
+                        <li><h:link outcome="/pages/views/create.xhtml" value="Cari Olustur"/></li>
+                        <li><h:link outcome="/pages/views/list.xhtml" value="Carilerim"/></li>
+                    </ul>
+                </li>
+
+                <!-- Islemler (Procedure) grubu -->
+                <li>
+                    <h:link outcome="/pages/procedures/create.xhtml">
+                        <span class="icon">&#10133;</span> Islem Tanimla
+                    </h:link>
+                </li>
+
+                <li>
+                    <h:link outcome="/pages/procedures/list.xhtml">
+                        <span class="icon">&#129518;</span> Islemlerim
+                    </h:link>
+                </li>
+
+                <li>
+                    <h:link outcome="/pages/logs/list.xhtml">
+                        <span class="icon">&#128220;</span> Islem Gecmisi
+                    </h:link>
+                </li>
+
+
+
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- ============ MAIN CONTENT ============ -->
+    <main class="main-content">
+
+        <h:messages globalOnly="true" styleClass="messages"
+                    infoClass="msg-info" errorClass="msg-error" warnClass="msg-warn"/>
+
+        <p:growl id="growl" showDetail="true" life="4000"/>
+
+        <ui:insert name="content">Icerik</ui:insert>
+    </main>
+
+</div>
+
+<script>
+    function toggleSub(el) {
+        var ul = el.nextElementSibling;
+        if (ul) {
+            ul.classList.toggle('open');
+            el.classList.toggle('expanded');
+        }
+    }
+</script>
+
+</h:body>
+</f:view>
+</html>

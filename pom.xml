@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.muhasebe</groupId>
+    <artifactId>muhasebe-backend</artifactId>
+    <version>1.0.0</version>
+    <packaging>war</packaging>
+
+    <name>muhasebe-backend</name>
+    <description>Dinamik Muhasebe Yazilimi - Jakarta EE 10</description>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+
+        <jakartaee.version>10.0.0</jakartaee.version>
+        <eclipselink.version>4.0.2</eclipselink.version>
+        <postgresql.version>42.7.5</postgresql.version>
+        <primefaces.version>13.0.7</primefaces.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- ==================== Jakarta EE 10 API (provided) ==================== -->
+        <!-- WildFly icindeki Jakarta EE implementasyonunu kullanacagiz, bu yuzden 'provided' -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>${jakartaee.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- ==================== EclipseLink (ORM) ==================== -->
+        <!-- WildFly varsayilan olarak Hibernate kullanir; EclipseLink'i WAR icine pakcetliyoruz -->
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>eclipselink</artifactId>
+            <version>${eclipselink.version}</version>
+        </dependency>
+
+        <!-- ==================== PostgreSQL JDBC ==================== -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+
+        <!-- ==================== PrimeFaces (JSF UI Component Library) ==================== -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>${primefaces.version}</version>
+            <classifier>jakarta</classifier>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>muhasebe-backend</finalName>
+
+        <!-- src/main/resources altindaki her seyi WAR'in WEB-INF/classes altina kopyala -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <archive>
+                        <!-- persistence.xml'in WAR icinde dogru yerde olmasini garantile -->
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

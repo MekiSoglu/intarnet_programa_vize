@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Kategori Detaylari</ui:define>
+
+    <ui:define name="content">
+        <h2>Kategori Detay Alanlari</h2>
+        <p class="hint">Bu alanlar kategorilerinize atayabileceginiz ek ozellikler (ornek: Renk, Marka, Boyut).</p>
+
+        <h:form id="detForm">
+            <div class="panel">
+                <h3>#{categoryDetailsBean.selected.id == null ? 'Yeni Detay' : 'Detay Duzenle'}</h3>
+                <div class="field">
+                    <label>Ad:</label>
+                    <p:inputText value="#{categoryDetailsBean.selected.name}" size="30"/>
+                </div>
+                <div class="field">
+                    <label>Veri Tipi:</label>
+                    <p:selectOneMenu value="#{categoryDetailsBean.selected.dataType}">
+                        <f:selectItems value="#{categoryDetailsBean.dataTypes}"/>
+                    </p:selectOneMenu>
+                </div>
+                <p:commandButton value="Kaydet" action="#{categoryDetailsBean.save}"
+                                 update=":detForm :growl" styleClass="btn btn-primary"/>
+                <p:commandButton value="Yeni" action="#{categoryDetailsBean.newItem}"
+                                 update=":detForm" styleClass="btn"/>
+            </div>
+
+            <p:dataTable value="#{categoryDetailsBean.items}" var="d" emptyMessage="Detay yok"
+                         styleClass="app-table">
+                <p:column headerText="ID" style="width:80px">#{d.id}</p:column>
+                <p:column headerText="Ad">#{d.name}</p:column>
+                <p:column headerText="Veri Tipi">#{d.dataType}</p:column>
+                <p:column headerText="Islem" style="width:180px">
+                    <p:commandButton value="Duzenle" styleClass="btn btn-sm"
+                                     action="#{categoryDetailsBean.edit(d)}" update=":detForm"/>
+                    &#160;
+                    <p:commandButton value="Sil" styleClass="btn btn-sm btn-danger"
+                                     action="#{categoryDetailsBean.delete(d.id)}" update=":detForm :growl">
+                        <p:confirm header="Onay" message="Silinsin mi?"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Evet" type="button" styleClass="btn btn-danger ui-confirmdialog-yes"/>
+                <p:commandButton value="Hayir" type="button" styleClass="btn ui-confirmdialog-no"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

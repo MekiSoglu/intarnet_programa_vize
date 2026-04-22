@@ -1,0 +1,21 @@
+# Docker build'de gerekmeyen dosyalari exclude et
+.idea/
+.git/
+*.iml
+*.log
+
+# Maven
+target/*
+!target/muhasebe-backend.war
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dokuman
+README.md
+JSF-OGREN.md
+
+# Editor
+.vscode/
+*.swp

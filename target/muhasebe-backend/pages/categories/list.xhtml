@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Kategoriler</ui:define>
+
+    <ui:define name="content">
+        <h2>Kategori Olustur</h2>
+
+        <h:form id="catForm">
+            <div class="panel">
+                <h3>#{categoryBean.selected.id == null ? 'Yeni Kategori' : 'Kategori Duzenle'}</h3>
+
+                <div class="field">
+                    <label>Parent Kategori (opsiyonel):</label>
+                    <p:selectOneMenu value="#{categoryBean.selected.parentId}">
+                        <f:selectItem itemLabel="-- Root (Ana Kategori) --" itemValue="#{null}"/>
+                        <f:selectItems value="#{categoryBean.categories}" var="c"
+                                       itemLabel="#{categoryBean.getCategoryPath(c)}"
+                                       itemValue="#{c.id}"/>
+                    </p:selectOneMenu>
+                </div>
+
+                <div class="field">
+                    <label>Kategori Adi:</label>
+                    <p:inputText value="#{categoryBean.selected.name}" size="30" required="true"/>
+                </div>
+
+                <div class="field">
+                    <label>Aciklama:</label>
+                    <p:inputText value="#{categoryBean.selected.description}" size="50"/>
+                </div>
+
+                <p:commandButton value="Kaydet" action="#{categoryBean.save}"
+                                 update=":catForm :growl" styleClass="btn btn-primary"/>
+                <p:commandButton value="Yeni" action="#{categoryBean.newCategory}"
+                                 update=":catForm" styleClass="btn"/>
+            </div>
+
+            <h3>Mevcut Kategoriler</h3>
+            <p:dataTable value="#{categoryBean.categories}" var="c" emptyMessage="Kategori yok"
+                         styleClass="app-table">
+                <p:column headerText="ID" style="width:80px">#{c.id}</p:column>
+                <p:column headerText="Hiyerarsi">
+                    <h:outputText value="#{categoryBean.getCategoryPath(c)}"/>
+                </p:column>
+                <p:column headerText="Aciklama">#{c.description}</p:column>
+                <p:column headerText="Islem" style="width:180px">
+                    <p:commandButton value="Duzenle" styleClass="btn btn-sm"
+                                     action="#{categoryBean.edit(c)}" update=":catForm"/>
+                    &#160;
+                    <p:commandButton value="Sil" styleClass="btn btn-sm btn-danger"
+                                     action="#{categoryBean.delete(c.id)}" update=":catForm :growl">
+                        <p:confirm header="Cascade Silme Onayi"
+                                   message="#{categoryBean.getDeletePreview(c.id)}"/>                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Evet" type="button" styleClass="btn btn-danger ui-confirmdialog-yes"/>
+                <p:commandButton value="Hayir" type="button" styleClass="btn ui-confirmdialog-no"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

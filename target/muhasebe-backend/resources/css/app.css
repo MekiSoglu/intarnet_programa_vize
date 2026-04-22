@@ -1,0 +1,438 @@
+/* ==================== Muhasebe Backend - app.css ==================== */
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    background: #f5f6f8;
+    color: #222;
+}
+
+/* ============ Layout Grid ============ */
+.app-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+}
+
+/* ============ Sidebar ============ */
+.sidebar {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar .brand {
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.sidebar .brand a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidenav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidenav > ul > li {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.sidenav a {
+    color: #ecf0f1;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    transition: background 0.15s;
+}
+
+.sidenav a:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.sidenav .icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.sidenav .group-header {
+    padding: 12px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+    transition: background 0.15s;
+}
+
+.sidenav .group-header:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.sidenav .arrow {
+    margin-left: auto;
+    font-size: 10px;
+    transition: transform 0.2s;
+}
+
+.sidenav .group-header.expanded .arrow {
+    transform: rotate(180deg);
+}
+
+.sidenav .submenu {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    background: rgba(0,0,0,0.15);
+}
+
+.sidenav .submenu.open {
+    max-height: 500px;
+}
+
+.sidenav .submenu a {
+    padding: 10px 20px 10px 50px;
+    font-size: 13px;
+}
+
+/* ============ Main Content ============ */
+.main-content {
+    padding: 30px;
+    overflow-x: auto;
+}
+
+/* ============ Hero ============ */
+.hero {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 40px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+.hero h1 { margin: 0 0 10px; font-size: 28px; }
+.hero p { margin: 0; opacity: 0.95; }
+
+/* ============ Dashboard Stat Cards ============ */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border-left: 4px solid #3498db;
+}
+
+.stat-card.accent-green { border-left-color: #27ae60; }
+.stat-card.accent-orange { border-left-color: #e67e22; }
+.stat-card.accent-purple { border-left-color: #8e44ad; }
+.stat-card.accent-red { border-left-color: #e74c3c; }
+
+.stat-card .stat-label {
+    font-size: 12px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+}
+
+.stat-card .stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+/* ============ Cards ============ */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.card h3 { margin-top: 0; color: #2c3e50; }
+
+.btn-link {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* ============ Page Header ============ */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.page-header h2 { margin: 0; }
+
+/* ============ Buttons ============ */
+.btn, .ui-button.btn {
+    display: inline-block;
+    padding: 6px 14px;
+    background: #ecf0f1;
+    color: #2c3e50 !important;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.btn:hover { background: #dfe4e6; }
+
+.btn-primary, .ui-button.btn-primary {
+    background: #3498db !important;
+    color: white !important;
+    border-color: #2980b9 !important;
+}
+
+.btn-primary:hover { background: #2980b9 !important; }
+
+.btn-secondary {
+    background: #95a5a6;
+    color: white !important;
+    border-color: #7f8c8d;
+}
+
+.btn-danger, .ui-button.btn-danger {
+    background: #e74c3c !important;
+    color: white !important;
+    border-color: #c0392b !important;
+}
+
+.btn-success {
+    background: #27ae60 !important;
+    color: white !important;
+    border-color: #229954 !important;
+}
+
+.btn-sm {
+    padding: 3px 10px;
+    font-size: 12px;
+}
+
+/* ============ Forms ============ */
+.field {
+    margin-bottom: 14px;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+    color: #333;
+}
+
+.field-inline {
+    display: inline-block;
+    margin-right: 12px;
+    margin-bottom: 8px;
+}
+
+.field-inline label {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 2px;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+/* ============ Panel ============ */
+.panel {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+}
+
+.panel h3 { margin-top: 0; }
+
+/* ============ Tables ============ */
+.app-table {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+}
+
+/* ============ Messages ============ */
+.messages {
+    margin-bottom: 16px;
+}
+
+.msg-info, .msg-warn, .msg-error {
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+
+.msg-info { background: #d4edda; color: #155724; }
+.msg-warn { background: #fff3cd; color: #856404; }
+.msg-error { background: #f8d7da; color: #721c24; }
+
+/* ============ Hint Box ============ */
+.hint {
+    background: #fffbea;
+    border-left: 4px solid #f1c40f;
+    padding: 14px 16px;
+    margin-top: 20px;
+    border-radius: 4px;
+}
+
+.hint ul { margin: 8px 0 0 20px; }
+.hint code {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+/* ============ Tree / Hierarchy ============ */
+.tree-node {
+    padding: 8px 0 8px 20px;
+    border-left: 2px solid #ecf0f1;
+    margin-left: 10px;
+}
+
+.tree-node.root {
+    border-left: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.tree-label {
+    font-weight: 600;
+    color: #2c3e50;
+    padding: 6px 10px;
+    background: white;
+    border-radius: 4px;
+    display: inline-block;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    margin-bottom: 6px;
+}
+
+/* ============ Drag-drop (Islemler sayfasi icin) ============ */
+.dnd-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.dnd-box {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    min-height: 280px;
+}
+
+.dnd-box h3 { margin-top: 0; font-size: 15px; }
+
+.dnd-item {
+    background: #ecf0f1;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    cursor: move;
+    user-select: none;
+}
+
+.dnd-item:hover { background: #dfe4e6; }
+
+.dnd-selected {
+    background: white;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.dnd-selected .ops {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.dnd-selected .ops select {
+    flex: 1;
+}
+
+/* ============ Inputs ============ */
+input[type=text], input[type=number], input[type=date], select,
+.ui-inputtext {
+    padding: 6px 10px !important;
+    border: 1px solid #bdc3c7 !important;
+    border-radius: 4px !important;
+}
+
+h2, h3, h4 {
+    color: #2c3e50;
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 900px) {
+    .app-layout {
+        grid-template-columns: 1fr;
+    }
+    .sidebar {
+        position: relative;
+        height: auto;
+    }
+    .dnd-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.tree-node.table-row {
+    background: #ecf0f1;
+    border-left: 3px solid #3498db;
+    margin: 4px 0 4px 20px;
+    padding: 6px 10px;
+    border-radius: 4px;
+}

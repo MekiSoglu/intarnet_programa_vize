@@ -1,0 +1,74 @@
+#
+# Docker Compose: PostgreSQL + WildFly 31
+#
+# Kullanim:
+#   1) mvn clean package            -> target/muhasebe-backend.war uretir
+#   2) docker compose up -d         -> PostgreSQL ve WildFly baslar
+#   3) Tarayici: http://localhost:8080/muhasebe-backend/
+#
+# Durdurmak:   docker compose down
+# Volume temizlemek:  docker compose down -v
+#
+services:
+
+  # =============================================================
+  #  PostgreSQL 16
+  # =============================================================
+  postgres:
+    image: postgres:16-alpine
+    container_name: muhasebe-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: muhasebedb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      # Host: 5433, Container icinde: 5432 (cakisma engellemek icin)
+      # Makinede baska bir PostgreSQL 5432'yi kullaniyorsa bu calisir
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Init scripti - ilk baslatmada otomatik calisir
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d muhasebedb"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - muhasebe-net
+
+  # =============================================================
+  #  WildFly 31 - Jakarta EE 10
+  # =============================================================
+  wildfly:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: muhasebe-wildfly
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"   # Uygulama
+      - "9990:9990"   # Yonetim konsolu
+    environment:
+      # WildFly'in expression resolver'i env var'lari okuyabilsin
+      JAVA_OPTS: "-Djboss.bind.address=0.0.0.0 -Djboss.bind.address.management=0.0.0.0 -Dee.jboss.resolver.allow.expressions.in.jndi.lookup=true"
+      # Datasource baglanti bilgileri (datasource.cli icinden okunur)
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: muhasebedb
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    networks:
+      - muhasebe-net
+
+volumes:
+  postgres_data:
+    name: muhasebe-postgres-data
+
+networks:
+  muhasebe-net:
+    name: muhasebe-network

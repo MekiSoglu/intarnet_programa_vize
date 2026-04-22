@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Yeni Procedure</ui:define>
+
+    <ui:define name="content">
+        <h2>Yeni Procedure Olustur</h2>
+
+        <h:form id="pForm">
+            <div class="field">
+                <label>Procedure Adi:</label>
+                <p:inputText value="#{procedureCreateBean.procedureName}" size="40" required="true"/>
+            </div>
+
+            <h3>Input Parametreleri</h3>
+            <p:dataTable value="#{procedureCreateBean.inputs}" var="in" id="inTbl">
+                <p:column headerText="Isim">
+                    <p:inputText value="#{in.name}" size="25"/>
+                </p:column>
+                <p:column headerText="Tip">
+                    <p:selectOneMenu value="#{in.dataType}">
+                        <f:selectItems value="#{procedureCreateBean.dataTypes}"/>
+                    </p:selectOneMenu>
+                </p:column>
+                <p:column headerText="Islem" style="width:80px">
+                    <p:commandButton icon="pi pi-times" styleClass="btn-danger btn-sm"
+                                     action="#{procedureCreateBean.removeInput(in)}"
+                                     update="inTbl :pForm:opTbl" process="@form"/>
+                </p:column>
+            </p:dataTable>
+            <p:commandButton value="+ Input Ekle" action="#{procedureCreateBean.addInput}"
+                             update="inTbl :pForm:opTbl" process="@form" styleClass="btn btn-secondary"/>
+
+            <h3>Operasyonlar</h3>
+            <p:dataTable value="#{procedureCreateBean.operations}" var="op" id="opTbl">
+                <p:column headerText="Tablo">
+                    <p:selectOneMenu value="#{op.table}">
+                        <f:selectItem itemLabel="-- Sec --" itemValue=""/>
+                        <f:selectItems value="#{procedureCreateBean.availableTables}"/>
+                        <p:ajax event="change" update="opTbl"/>
+                    </p:selectOneMenu>
+                </p:column>
+                <p:column headerText="Kolon">
+                    <p:selectOneMenu value="#{op.column}">
+                        <f:selectItem itemLabel="-- Sec --" itemValue=""/>
+                        <f:selectItems value="#{procedureCreateBean.getColumnsForRow(op)}"/>
+                    </p:selectOneMenu>
+                </p:column>
+                <p:column headerText="Operasyon">
+                    <p:selectOneMenu value="#{op.operation}">
+                        <f:selectItems value="#{procedureCreateBean.operationTypes}"/>
+                    </p:selectOneMenu>
+                </p:column>
+                <p:column headerText="Input Kullan">
+                    <p:selectOneMenu value="#{op.inputName}">
+                        <f:selectItem itemLabel="-- Sec --" itemValue=""/>
+                        <f:selectItems value="#{procedureCreateBean.inputNames}"/>
+                    </p:selectOneMenu>
+                </p:column>
+                <p:column headerText="Islem" style="width:80px">
+                    <p:commandButton icon="pi pi-times" styleClass="btn-danger btn-sm"
+                                     action="#{procedureCreateBean.removeOperation(op)}"
+                                     update="opTbl" process="@form"/>
+                </p:column>
+            </p:dataTable>
+            <p:commandButton value="+ Operasyon Ekle" action="#{procedureCreateBean.addOperation}"
+                             update="opTbl" process="@form" styleClass="btn btn-secondary"/>
+
+            <div class="actions">
+                <p:commandButton value="Olustur" action="#{procedureCreateBean.createProcedure}"
+                                 styleClass="btn btn-primary" ajax="false"/>
+                <h:link outcome="/pages/procedures/list.xhtml" value="Iptal" styleClass="btn"/>
+            </div>
+        </h:form>
+
+        <div class="hint">
+            <strong>Ornek:</strong> "Borc odendiginde banka hesabindan para dus"
+            <ul>
+                <li>Procedure adi: <code>borc_odeme</code></li>
+                <li>Input: <code>odenen_tutar</code> (NUMERIC)</li>
+                <li>Operation 1: borclar.odenen, increase, inputName=odenen_tutar</li>
+                <li>Operation 2: banka.bakiye, decrease, inputName=odenen_tutar</li>
+            </ul>
+        </div>
+    </ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Cari Olustur</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h2>Yeni Cari (View) Olustur</h2>
+            <h:link outcome="/pages/views/list.xhtml" value="&lt; Carilerim" styleClass="btn"/>
+        </div>
+
+        <h:form id="viewForm">
+
+            <div class="panel">
+                <h3>Cari Adi</h3>
+                <p:inputText value="#{viewCreateBean.viewName}" size="40"
+                             placeholder="Cari adini girin (orn: musteri_borc_raporu)"/>
+            </div>
+
+            <div class="panel">
+                <h3>Tablo Ekle</h3>
+                <div class="field-inline">
+                    <p:selectOneMenu value="#{viewCreateBean.tableToAdd}">
+                        <f:selectItem itemLabel="-- Tablo sec --" itemValue=""/>
+                        <f:selectItems value="#{viewCreateBean.availableTables}"/>
+                    </p:selectOneMenu>
+                    &#160;
+                    <p:commandButton value="+ Ekle" action="#{viewCreateBean.addTableToSelection}"
+                                     update=":viewForm" styleClass="btn btn-secondary"/>
+                </div>
+            </div>
+
+            <div class="panel" style="background:#e8f4fd;">
+                <h3>Secilen Tablolar (#{viewCreateBean.selectedTables.size()})</h3>
+                <h:outputText value="Henuz tablo eklenmedi. Yukaridan en az 2 tablo ekleyin."
+                              rendered="#{empty viewCreateBean.selectedTables}" style="color:#666;"/>
+                <ul>
+                    <ui:repeat value="#{viewCreateBean.selectedTables}" var="t">
+                        <li style="margin-bottom:6px;">
+                            <strong>#{t}</strong>
+                            &#160;
+                            <p:commandButton value="Cikar" styleClass="btn btn-sm btn-danger"
+                                             action="#{viewCreateBean.removeSelectedTable(t)}"
+                                             update=":viewForm"/>
+                        </li>
+                    </ui:repeat>
+                </ul>
+            </div>
+
+            <div class="panel" rendered="#{not empty viewCreateBean.relatedTables}">
+                <h3>Tespit Edilen Iliskiler</h3>
+                <p class="hint">Asagidaki iliskiler table_map metadata'sindan okundu. View bu iliskileri kullanacak.</p>
+                <p:dataTable value="#{viewCreateBean.relatedTables}" var="rel" styleClass="app-table">
+                    <p:column headerText="Tablo">#{rel['table_name']}</p:column>
+                    <p:column headerText="Iliskili">#{rel['related_table']}</p:column>
+                    <p:column headerText="Tipi">#{rel['relation_type']}</p:column>
+                    <p:column headerText="Ara Tablo">#{rel['join_table_name']}</p:column>
+                </p:dataTable>
+            </div>
+
+            <div class="actions">
+                <p:commandButton value="Cari Olustur" action="#{viewCreateBean.createView}"
+                                 styleClass="btn btn-success" update=":viewForm :growl"/>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

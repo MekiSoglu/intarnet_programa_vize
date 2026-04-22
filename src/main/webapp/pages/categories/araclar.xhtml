@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Araclar / Kategoriler</ui:define>
+
+    <ui:define name="content">
+        <h2>Kategori Agaci + Tablolar + Veriler</h2>
+        <p class="hint">
+            Tum root kategoriler asagida gosterilir. Kategoriye tiklayinca alt kategoriler ve
+            o kategoriye bagli tablolar acilir. Tablo adina tiklayarak verileri gor + yeni kayit ekle.
+        </p>
+
+        <h:form id="araclarForm">
+            <div class="panel">
+                <h:outputText value="Henuz hicbir kategori yok. Once Category > Create Category'den olustur."
+                              rendered="#{empty araclarBean.rootCategories}" style="color:#999;"/>
+
+                <ui:repeat value="#{araclarBean.rootCategories}" var="root">
+                    <div class="tree-node root">
+                        <p:commandButton value="#{araclarBean.isExpanded(root.id) ? '[-]' : '[+]'} #{root.name}"
+                                         action="#{araclarBean.toggle(root.id)}"
+                                         update=":araclarForm" styleClass="tree-label btn"/>
+
+                        <h:panelGroup rendered="#{araclarBean.isExpanded(root.id)}">
+
+                            <ui:repeat value="#{araclarBean.getTablesOf(root.id)}" var="rootTbl">
+                                <div class="tree-node table-row">
+                                    <p:commandButton value="#{araclarBean.isTableOpen(rootTbl) ? '[v]' : '[>]'} #{rootTbl}"
+                                                     action="#{araclarBean.toggleTable(rootTbl)}"
+                                                     update=":araclarForm" styleClass="btn btn-sm"
+                                                     style="background:#3498db;color:white;"/>
+                                    <ui:include src="/pages/categories/_table-data.xhtml">
+                                        <ui:param name="tableName" value="#{rootTbl}"/>
+                                    </ui:include>
+                                </div>
+                            </ui:repeat>
+
+                            <ui:repeat value="#{araclarBean.getChildren(root.id)}" var="lvl1">
+                                <div class="tree-node">
+                                    <p:commandButton value="#{araclarBean.isExpanded(lvl1.id) ? '[-]' : '[+]'} #{lvl1.name}"
+                                                     action="#{araclarBean.toggle(lvl1.id)}"
+                                                     update=":araclarForm" styleClass="tree-label btn"/>
+
+                                    <h:panelGroup rendered="#{araclarBean.isExpanded(lvl1.id)}">
+                                        <ui:repeat value="#{araclarBean.getTablesOf(lvl1.id)}" var="tbl1">
+                                            <div class="tree-node table-row">
+                                                <p:commandButton value="#{araclarBean.isTableOpen(tbl1) ? '[v]' : '[>]'} #{tbl1}"
+                                                                 action="#{araclarBean.toggleTable(tbl1)}"
+                                                                 update=":araclarForm" styleClass="btn btn-sm"
+                                                                 style="background:#3498db;color:white;"/>
+                                                <ui:include src="/pages/categories/_table-data.xhtml">
+                                                    <ui:param name="tableName" value="#{tbl1}"/>
+                                                </ui:include>
+                                            </div>
+                                        </ui:repeat>
+
+                                        <ui:repeat value="#{araclarBean.getChildren(lvl1.id)}" var="lvl2">
+                                            <div class="tree-node">
+                                                <p:commandButton value="#{araclarBean.isExpanded(lvl2.id) ? '[-]' : '[+]'} #{lvl2.name}"
+                                                                 action="#{araclarBean.toggle(lvl2.id)}"
+                                                                 update=":araclarForm" styleClass="tree-label btn"/>
+
+                                                <h:panelGroup rendered="#{araclarBean.isExpanded(lvl2.id)}">
+                                                    <ui:repeat value="#{araclarBean.getTablesOf(lvl2.id)}" var="tbl2">
+                                                        <div class="tree-node table-row">
+                                                            <p:commandButton value="#{araclarBean.isTableOpen(tbl2) ? '[v]' : '[>]'} #{tbl2}"
+                                                                             action="#{araclarBean.toggleTable(tbl2)}"
+                                                                             update=":araclarForm" styleClass="btn btn-sm"
+                                                                             style="background:#3498db;color:white;"/>
+                                                            <ui:include src="/pages/categories/_table-data.xhtml">
+                                                                <ui:param name="tableName" value="#{tbl2}"/>
+                                                            </ui:include>
+                                                        </div>
+                                                    </ui:repeat>
+
+                                                    <ui:repeat value="#{araclarBean.getChildren(lvl2.id)}" var="lvl3">
+                                                        <div class="tree-node">
+                                                            <p:commandButton value="#{araclarBean.isExpanded(lvl3.id) ? '[-]' : '[+]'} #{lvl3.name}"
+                                                                             action="#{araclarBean.toggle(lvl3.id)}"
+                                                                             update=":araclarForm" styleClass="tree-label btn"/>
+
+                                                            <h:panelGroup rendered="#{araclarBean.isExpanded(lvl3.id)}">
+                                                                <ui:repeat value="#{araclarBean.getTablesOf(lvl3.id)}" var="tbl3">
+                                                                    <div class="tree-node table-row">
+                                                                        <p:commandButton value="#{araclarBean.isTableOpen(tbl3) ? '[v]' : '[>]'} #{tbl3}"
+                                                                                         action="#{araclarBean.toggleTable(tbl3)}"
+                                                                                         update=":araclarForm" styleClass="btn btn-sm"
+                                                                                         style="background:#3498db;color:white;"/>
+                                                                        <ui:include src="/pages/categories/_table-data.xhtml">
+                                                                            <ui:param name="tableName" value="#{tbl3}"/>
+                                                                        </ui:include>
+                                                                    </div>
+                                                                </ui:repeat>
+                                                            </h:panelGroup>
+                                                        </div>
+                                                    </ui:repeat>
+                                                </h:panelGroup>
+                                            </div>
+                                        </ui:repeat>
+                                    </h:panelGroup>
+                                </div>
+                            </ui:repeat>
+                        </h:panelGroup>
+                    </div>
+                </ui:repeat>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>

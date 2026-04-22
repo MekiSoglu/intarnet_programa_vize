@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:panelGroup rendered="#{araclarBean.isTableOpen(tableName)}" layout="block"
+                  style="margin:10px 0 10px 30px; padding:15px; background:#f8f9fa; border-radius:6px; border-left:3px solid #3498db;">
+
+        <h4 style="margin:0 0 10px 0;">Tablo: #{tableName}</h4>
+
+        <p:dataTable value="#{araclarBean.openTableRows}" var="row" emptyMessage="Henuz kayit yok."
+                     styleClass="app-table" style="margin-bottom:15px;">
+            <p:columns value="#{araclarBean.openTableColumns}" var="col">
+                <f:facet name="header">#{col}</f:facet>
+                <h:outputText value="#{row[col]}"/>
+            </p:columns>
+            <p:column headerText="" style="width:60px">
+                <p:commandButton value="x" styleClass="btn btn-sm btn-danger"
+                                 action="#{araclarBean.deleteRow(row)}"
+                                 update=":araclarForm :growl">
+                    <p:confirm header="Onay" message="Kayit silinsin mi?"/>
+                </p:commandButton>
+            </p:column>
+        </p:dataTable>
+
+        <div style="background:white; padding:12px; border-radius:4px;">
+            <strong>Yeni Kayit Ekle</strong>
+            <div class="form-row" style="margin:8px 0;">
+                <ui:repeat value="#{araclarBean.openTableColumns}" var="col">
+                    <h:panelGroup rendered="#{!araclarBean.isSystemCol(col)}" styleClass="field-inline">
+                        <label>#{col}</label>
+                        <p:inputText value="#{araclarBean.newRow[col]}" size="18"/>
+                    </h:panelGroup>
+                </ui:repeat>
+            </div>
+            <p:commandButton value="+ Ekle" action="#{araclarBean.addRow}"
+                             update=":araclarForm :growl" styleClass="btn btn-success"/>
+        </div>
+
+        <p:confirmDialog global="true">
+            <p:commandButton value="Evet" type="button" styleClass="btn btn-danger ui-confirmdialog-yes"/>
+            <p:commandButton value="Hayir" type="button" styleClass="btn ui-confirmdialog-no"/>
+        </p:confirmDialog>
+    </h:panelGroup>
+
+</ui:composition>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Sistem İşlem Geçmişi</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h2>İşlem Geçmişi (Audit Logs)</h2>
+        </div>
+
+        <h:form id="logForm">
+            <p:dataTable value="#{systemLogBean.logs}" var="log"
+                         paginator="true" rows="15" styleClass="app-table"
+                         emptyMessage="Henüz kaydedilmiş bir işlem yok.">
+
+                <p:column headerText="Tarih" sortBy="#{log.tarih}" style="width: 180px;">
+                    <h:outputText value="#{log.tarih}">
+                        <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm:ss" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="İşlem Adı" filterBy="#{log.islemAdi}" filterMatchMode="contains" style="width: 250px;">
+                    <h:outputText value="#{log.islemAdi}" style="font-weight:bold; color: #2980b9;" />
+                </p:column>
+
+                <p:column headerText="İşlem Detayı">
+                    <h:outputText value="#{log.detay}" />
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+</html>
