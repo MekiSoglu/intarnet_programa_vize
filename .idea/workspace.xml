@@ -9,7 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="794ad98a-c937-47b7-9504-4e4e96186cb8" name="Changes" comment="" />
+    <list default="true" id="794ad98a-c937-47b7-9504-4e4e96186cb8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/muhasebe/dynamic/procedure/DynamicProcedureService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/muhasebe/dynamic/procedure/DynamicProcedureService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/muhasebe/web/bean/ProcedureExecuteBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/muhasebe/web/bean/ProcedureExecuteBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/procedures/execute.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/procedures/execute.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend.war" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,6 +27,14 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -146,12 +160,24 @@
       <workItem from="1776613545133" duration="5415000" />
       <workItem from="1776710730086" duration="1405000" />
       <workItem from="1776712221713" duration="12654000" />
-      <workItem from="1776851858400" duration="5983000" />
+      <workItem from="1776851858400" duration="7629000" />
+      <workItem from="1776932996976" duration="3412000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/muhasebe_backend$wildfly.ic" NAME="wildfly Coverage Results" MODIFIED="1776711849073" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

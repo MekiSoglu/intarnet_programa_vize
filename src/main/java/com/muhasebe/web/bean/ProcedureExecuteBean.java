@@ -57,6 +57,28 @@ public class ProcedureExecuteBean implements Serializable {
             }
             inputValues.clear();
             selectedRows.clear();
+            affectedTables.clear();
+            tableData.clear();
+            tableColumns.clear();
+
+            // definitionJson'dan tablolari ve inputlari otomatik doldur
+            Map<String, List<String>> params = procedureService.getProcedureParameters(procedureName);
+            List<String> inputs = params.getOrDefault("inputs", Collections.emptyList());
+            List<String> tables = params.getOrDefault("tables", Collections.emptyList());
+
+            for (String inputName : inputs) {
+                inputValues.put(inputName, "");
+            }
+
+            for (String table : tables) {
+                try {
+                    tableColumns.put(table, dmlService.getTableColumns(table));
+                    tableData.put(table, dmlService.getTableData(table));
+                    affectedTables.add(table);
+                } catch (Exception ex) {
+                    FacesUtil.warn("Tablo yuklenemedi: " + table + " (" + ex.getMessage() + ")");
+                }
+            }
         } catch (Exception e) {
             FacesUtil.error(e);
         }

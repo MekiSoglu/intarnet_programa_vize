@@ -18,7 +18,10 @@
 
             <div class="panel">
                 <h3>1. Etkilenecek Tablolar</h3>
-                <p class="hint">Islemin etki edecegi tabloyu secin, icinden bir satir secin.</p>
+                <p class="hint">Islem tanimlanirken secilen tablolar otomatik yuklendi. Her tablodan etkilenecek satiri secin.</p>
+                <h:outputText value="Bu islem icin etkilenecek tablo bulunamadi."
+                              rendered="#{empty procedureExecuteBean.affectedTables}"
+                              style="color:#999;"/>
             </div>
 
             <ui:repeat value="#{procedureExecuteBean.affectedTables}" var="tbl">
@@ -29,9 +32,6 @@
                                           rendered="#{not empty procedureExecuteBean.selectedRows[tbl]}"
                                           style="color:#27ae60;font-weight:normal;"/>
                         </h3>
-                        <p:commandButton value="Tabloyu Kaldir" styleClass="btn btn-sm btn-danger"
-                                         action="#{procedureExecuteBean.removeTablePick(tbl)}"
-                                         update=":execForm" process="@this"/>
                     </div>
 
                     <p:dataTable value="#{procedureExecuteBean.tableData[tbl]}" var="row"
@@ -52,41 +52,19 @@
             </ui:repeat>
 
             <div class="panel">
-                <h4>Yeni Tablo Ekle</h4>
-                <div class="field-inline">
-                    <p:inputText id="newTblInput" value="#{procedureExecuteBean.tableNameToLoad}"
-                                 placeholder="Tablo adi (orn: borclar)" size="25"/>
-                    &#160;
-                    <p:commandButton value="+ Tabloyu Yukle"
-                                     action="#{procedureExecuteBean.selectTable(procedureExecuteBean.tableNameToLoad)}"
-                                     update=":execForm"
-                                     process="@this newTblInput"/>
-                </div>
-            </div>
-
-            <div class="panel">
                 <h3>2. Input Degerleri</h3>
+                <p class="hint">Islem tanimlanirken belirlenen parametreler otomatik listelendi. Her biri icin deger girin.</p>
+
+                <h:outputText value="Bu islem icin parametre tanimlanmamis."
+                              rendered="#{empty procedureExecuteBean.inputValues}"
+                              style="color:#999;"/>
 
                 <ui:repeat value="#{procedureExecuteBean.inputValues.keySet().toArray()}" var="inputKey">
                     <div class="field-inline" style="margin-bottom: 10px;">
-                        <label style="font-weight: bold; min-width: 120px; display: inline-block;">#{inputKey}:</label>
-                        <p:inputText value="#{procedureExecuteBean.inputValues[inputKey]}" size="20" placeholder="Deger girin"/>
-                        &#160;
-                        <p:commandButton icon="pi pi-times" styleClass="btn-danger btn-sm"
-                                         action="#{procedureExecuteBean.removeInput(inputKey)}"
-                                         update=":execForm" process="@this"/>
+                        <label style="font-weight: bold; min-width: 160px; display: inline-block;">#{inputKey}:</label>
+                        <p:inputText value="#{procedureExecuteBean.inputValues[inputKey]}" size="30" placeholder="Deger girin"/>
                     </div>
                 </ui:repeat>
-
-                <div style="margin-top:12px; border-top: 1px solid #eee; pt: 10px;">
-                    <p:inputText id="newInpInput" value="#{procedureExecuteBean.inputNameToAdd}"
-                                 placeholder="Parametre adi (orn: odenen_tutar)"/>
-                    &#160;
-                    <p:commandButton value="+ Parametre Ekle"
-                                     action="#{procedureExecuteBean.addInputFromForm}"
-                                     update=":execForm"
-                                     process="@this newInpInput"/>
-                </div>
             </div>
 
             <div class="actions" style="margin-top: 20px;">
@@ -99,10 +77,9 @@
         <div class="hint">
             <strong>Nasil kullanilir:</strong>
             <ul>
-                <li>Once <strong>"Tablo Ekle"</strong> kismindan islemin etkileyecegi tablolari (orn: kredi, hesap) yukleyin.</li>
-                <li>Tablo listesinden ilgili satirin yanindaki <strong>"Sec"</strong> butonuna tiklayin.</li>
-                <li>Ardindan <strong>"Parametre Ekle"</strong> kismindan procedure'de tanimladiginiz (orn: odenen_tutar) adini girin.</li>
-                <li>Son olarak degeri yazip <strong>"Islemi Calistir"</strong> butonuna basin.</li>
+                <li>Her tablo icin etkilenecek satirin yanindaki <strong>"Sec"</strong> butonuna tiklayin.</li>
+                <li><strong>"Input Degerleri"</strong> bolumundeki her parametre icin deger girin.</li>
+                <li>Son olarak <strong>"Islemi Calistir"</strong> butonuna basin.</li>
             </ul>
         </div>
     </ui:define>
