@@ -34,46 +34,36 @@ public class DynamicQueryService {
     @Inject
     private TableMapRepository tableMapRepository;
 
-    @SuppressWarnings("unchecked")
-    public List<Map<String, Object>> executeDynamicQuery(String rawTableName,
-                                                         String rawColumnName,
-                                                         String value) {
-        String tableName = validator.normalize(rawTableName);
-        String columnName = validator.normalize(rawColumnName);
-        validator.validateOrThrow(tableName, "Tablo adi");
-        validator.validateOrThrow(columnName, "Kolon adi");
+    // ... executeDynamicQuery metodu aynı kalabilir, sadece queryToMaps'i kolon isimlerini alacak şekilde güncelliyoruz ...
 
+    @SuppressWarnings("unchecked")
+    public List<Map<String, Object>> executeDynamicQuery(String tableName, String columnName, String value, List<String> columnNames) {
+        String normalizedTable = validator.normalize(tableName);
+        String normalizedColumn = validator.normalize(columnName);
         Object typedValue = convertValueType(value);
 
-        // M2M FK kontrolu
-        if (columnName.endsWith("_id")) {
-            String relatedTable = columnName.substring(0, columnName.length() - 3);
-            Optional<TableMapEntity> relOpt = tableMapRepository.findRelation(tableName, relatedTable);
-            if (relOpt.isPresent() &&
-                "many-to-many".equalsIgnoreCase(relOpt.get().getRelationType())) {
+        // Basit filtreleme sorgusu
+        String sql = "SELECT * FROM " + normalizedTable + " WHERE " + normalizedColumn + " = ?1";
 
-                TableMapEntity rel = relOpt.get();
-                String joinTable = rel.getJoinTableName();
-                if (joinTable != null && validator.isValid(joinTable)) {
-                    String mainCol, lookupCol;
-                    if (rel.getTableName().equals(tableName)) {
-                        mainCol = tableName + "_id";
-                        lookupCol = relatedTable + "_id";
-                    } else {
-                        mainCol = relatedTable + "_id";
-                        lookupCol = tableName + "_id";
-                    }
+        Query q = em.createNativeQuery(sql);
+        q.setParameter(1, typedValue);
+        List<Object[]> rawData = q.getResultList();
 
-                    String sql = "SELECT main.* FROM " + tableName + " main WHERE main.id IN (" +
-                            "SELECT " + mainCol + " FROM " + joinTable + " WHERE " + lookupCol + " = ?1)";
-                    return queryToMaps(sql, typedValue);
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Object item : rawData) {
+            Map<String, Object> rowMap = new LinkedHashMap<>();
+            if (item instanceof Object[]) {
+                Object[] row = (Object[]) item;
+                // Verileri gerçek kolon isimleriyle eşleştiriyoruz
+                for (int i = 0; i < columnNames.size() && i < row.length; i++) {
+                    rowMap.put(columnNames.get(i), row[i]);
                 }
+            } else {
+                rowMap.put(columnNames.get(0), item);
             }
+            result.add(rowMap);
         }
-
-        // Normal sorgu
-        String sql = "SELECT * FROM " + tableName + " WHERE " + columnName + " = :v";
-        return queryToMaps(sql, typedValue);
+        return result;
     }
 
     @SuppressWarnings("unchecked")

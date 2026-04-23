@@ -15,7 +15,6 @@
         </div>
 
         <h:form id="dataForm">
-            <!-- Yeni kayit formu -->
             <div class="panel">
                 <h3>Yeni Kayit Ekle</h3>
                 <div class="form-row">
@@ -23,7 +22,6 @@
                         <h:panelGroup rendered="#{!tableDataBean.isSystemCol(col)}" styleClass="field-inline">
                             <label>#{col}</label>
 
-                            <!-- FK kolonu: dropdown -->
                             <p:selectOneMenu value="#{tableDataBean.newRow[col]}"
                                              rendered="#{tableDataBean.isForeignKey(col)}">
                                 <f:selectItem itemLabel="-- Sec --" itemValue=""/>
@@ -31,14 +29,12 @@
                                                itemLabel="#{opt.value}" itemValue="#{opt.id}"/>
                             </p:selectOneMenu>
 
-                            <!-- Enum kolonu: dropdown -->
                             <p:selectOneMenu value="#{tableDataBean.newRow[col]}"
                                              rendered="#{!tableDataBean.isForeignKey(col) and tableDataBean.isEnumCol(col)}">
                                 <f:selectItem itemLabel="-- Sec --" itemValue=""/>
                                 <f:selectItems value="#{tableDataBean.getEnumValuesOf(col)}"/>
                             </p:selectOneMenu>
 
-                            <!-- Boolean: dropdown -->
                             <p:selectOneMenu value="#{tableDataBean.newRow[col]}"
                                              rendered="#{!tableDataBean.isForeignKey(col) and !tableDataBean.isEnumCol(col) and tableDataBean.isBooleanCol(col)}">
                                 <f:selectItem itemLabel="-- Sec --" itemValue=""/>
@@ -46,12 +42,10 @@
                                 <f:selectItem itemLabel="False" itemValue="false"/>
                             </p:selectOneMenu>
 
-                            <!-- Date: date input -->
                             <p:inputText value="#{tableDataBean.newRow[col]}" size="15"
                                          rendered="#{!tableDataBean.isForeignKey(col) and !tableDataBean.isEnumCol(col) and !tableDataBean.isBooleanCol(col) and tableDataBean.isDateCol(col)}"
                                          type="date"/>
 
-                            <!-- Normal: text input -->
                             <p:inputText value="#{tableDataBean.newRow[col]}" size="20"
                                          rendered="#{!tableDataBean.isForeignKey(col) and !tableDataBean.isEnumCol(col) and !tableDataBean.isBooleanCol(col) and !tableDataBean.isDateCol(col)}"/>
                         </h:panelGroup>
@@ -61,14 +55,42 @@
                                  update="dataForm :growl" styleClass="btn btn-primary"/>
             </div>
 
-            <!-- Mevcut veriler -->
+            <div class="panel" style="border-left: 5px solid #3498db; background: #fafafa;">
+                <h3><i class="pi pi-filter"></i> Veri Filtrele</h3>
+                <div class="form-row">
+                    <div class="field-inline">
+                        <label>Sorgulanacak Kolon</label>
+                        <p:selectOneMenu value="#{tableDataBean.filterColumn}" style="min-width: 180px;">
+                            <f:selectItem itemLabel="-- Seçin --" itemValue=""/>
+                            <f:selectItems value="#{tableDataBean.columns}" var="c"
+                                           itemLabel="#{c}" itemValue="#{c}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="field-inline">
+                        <label>Aranacak Değer</label>
+                        <p:inputText value="#{tableDataBean.filterValue}" placeholder="Değer giriniz..." size="30"/>
+                    </div>
+                    <div class="field-inline" style="padding-top: 18px;">
+                        <p:commandButton value="Filtrele" action="#{tableDataBean.applyFilter}"
+                                         update="dataForm :growl" icon="pi pi-search" styleClass="btn-primary"/>
+                        &#160;
+                        <p:commandButton value="Temizle" action="#{tableDataBean.clearFilter}"
+                                         update="dataForm" icon="pi pi-refresh" styleClass="btn-secondary"/>
+                    </div>
+                </div>
+            </div>
+
             <h3>Veriler</h3>
-            <p:dataTable value="#{tableDataBean.rows}" var="row" emptyMessage="Kayit yok"
-                         styleClass="app-table">
+            <p:dataTable value="#{tableDataBean.rows}" var="row"
+                         emptyMessage="Kayit yok"
+                         styleClass="app-table"
+                         rowStyleClass="#{(row['durum'] eq 'odendi' or row['durum'] eq 'ödendi') ? 'row-odendi' : ((row['durum'] eq 'odenmedi' or row['durum'] eq 'ödenmedi') ? 'row-odenmedi' : null)}">
+
                 <p:columns value="#{tableDataBean.columns}" var="col">
                     <f:facet name="header">#{col}</f:facet>
                     <h:outputText value="#{row[col]}"/>
                 </p:columns>
+
                 <p:column headerText="Islem" style="width:160px">
                     <p:commandButton icon="pi pi-pencil" styleClass="btn btn-sm"
                                      action="#{tableDataBean.prepareEdit(row)}"
@@ -82,14 +104,12 @@
                 </p:column>
             </p:dataTable>
 
-            <!-- Duzenleme dialog -->
             <p:dialog header="Kayit Duzenle" widgetVar="editDlg" modal="true" width="500">
                 <h:panelGroup id="editDialog" rendered="#{tableDataBean.editing}">
                     <ui:repeat value="#{tableDataBean.columns}" var="col">
                         <h:panelGroup rendered="#{!tableDataBean.isSystemCol(col)}" layout="block" styleClass="field">
                             <label>#{col}</label>
 
-                            <!-- FK kolonu: dropdown -->
                             <p:selectOneMenu value="#{tableDataBean.editRow[col]}"
                                              rendered="#{tableDataBean.isForeignKey(col)}">
                                 <f:selectItem itemLabel="-- Sec --" itemValue=""/>
@@ -97,14 +117,12 @@
                                                itemLabel="#{opt.value}" itemValue="#{opt.id}"/>
                             </p:selectOneMenu>
 
-                            <!-- Enum kolonu: dropdown -->
                             <p:selectOneMenu value="#{tableDataBean.editRow[col]}"
                                              rendered="#{!tableDataBean.isForeignKey(col) and tableDataBean.isEnumCol(col)}">
                                 <f:selectItem itemLabel="-- Sec --" itemValue=""/>
                                 <f:selectItems value="#{tableDataBean.getEnumValuesOf(col)}"/>
                             </p:selectOneMenu>
 
-                            <!-- Normal: text input -->
                             <p:inputText value="#{tableDataBean.editRow[col]}" size="40"
                                          rendered="#{!tableDataBean.isForeignKey(col) and !tableDataBean.isEnumCol(col)}"/>
                         </h:panelGroup>
