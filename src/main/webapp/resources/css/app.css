@@ -436,3 +436,22 @@ h2, h3, h4 {
     padding: 6px 10px;
     border-radius: 4px;
 }
+
+
+.row-odendi {
+    background-color: #d4edda !important;
+    color: #155724 !important;
+}
+
+.row-odendi:hover {
+    background-color: #c3e6cb !important;
+}
+
+.row-odenmedi {
+    background-color: #fff3cd !important;
+    color: #856404 !important;
+}
+
+.row-odenmedi:hover {
+    background-color: #ffeeba !important;
+}

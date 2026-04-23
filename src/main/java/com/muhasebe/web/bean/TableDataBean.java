@@ -35,6 +35,13 @@ public class TableDataBean implements Serializable {
 
     private Map<String, List<String>> enumColumns = new HashMap<>();
 
+    @Inject
+    private com.muhasebe.dynamic.query.DynamicQueryService queryService;
+
+    // Yeni değişkenler
+    private String filterColumn;
+    private String filterValue;
+
 
     /** FK kolonlarinin meta bilgisi: col adi -> relatedTable. */
     private Map<String, String> fkColumns = new HashMap<>();
@@ -175,6 +182,27 @@ public class TableDataBean implements Serializable {
         }
     }
 
+
+    public void applyFilter() {
+        if (filterColumn == null || filterColumn.isBlank() || filterValue == null || filterValue.isBlank()) {
+            loadTable(); // Kriter boşsa tüm veriyi yükle
+            return;
+        }
+        try {
+            // DynamicQueryService'i kullanarak filtrele
+            rows = queryService.executeDynamicQuery(tableName, filterColumn, filterValue, columns);
+            FacesUtil.info("Filtre uygulandı: " + rows.size() + " kayıt bulundu.");
+        } catch (Exception e) {
+            FacesUtil.error("Filtreleme hatası: " + e.getMessage());
+        }
+    }
+
+    public void clearFilter() {
+        filterColumn = null;
+        filterValue = null;
+        loadTable();
+    }
+
     private void loadEnumColumns() {
         try {
             enumColumns = ddlService.getEnumColumns(tableName);
@@ -237,4 +265,10 @@ public class TableDataBean implements Serializable {
     public boolean isEditing() { return editRow != null; }
     public Map<String, String> getFkColumns() { return fkColumns; }
     public Map<String, List<Map<String, Object>>> getFkOptions() { return fkOptions; }
+
+
+    public String getFilterColumn() { return filterColumn; }
+    public void setFilterColumn(String filterColumn) { this.filterColumn = filterColumn; }
+    public String getFilterValue() { return filterValue; }
+    public void setFilterValue(String filterValue) { this.filterValue = filterValue; }
 }

@@ -9,12 +9,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="794ad98a-c937-47b7-9504-4e4e96186cb8" name="Changes" comment="">
+    <list default="true" id="794ad98a-c937-47b7-9504-4e4e96186cb8" name="Changes" comment="fix dynmicprocedure">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/muhasebe/dynamic/procedure/DynamicProcedureService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/muhasebe/dynamic/procedure/DynamicProcedureService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/muhasebe/web/bean/ProcedureExecuteBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/muhasebe/web/bean/ProcedureExecuteBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/procedures/execute.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/procedures/execute.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend.war" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/muhasebe/dynamic/query/DynamicQueryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/muhasebe/dynamic/query/DynamicQueryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/muhasebe/web/bean/TableDataBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/muhasebe/web/bean/TableDataBean.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/tables/data.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/tables/data.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/css/app.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/muhasebe/dynamic/procedure/DynamicProcedureService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/muhasebe/dynamic/procedure/DynamicProcedureService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/muhasebe/web/bean/ProcedureExecuteBean.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/muhasebe/web/bean/ProcedureExecuteBean.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/dynamic/procedure/DynamicProcedureService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/dynamic/procedure/DynamicProcedureService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/web/bean/ProcedureExecuteBean.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/web/bean/ProcedureExecuteBean.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/pages/procedures/execute.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend/pages/procedures/execute.xhtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,24 +57,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/meki/Desktop/muhasebe-backend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/meki/Desktop/muhasebe-backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="wildfly" type="JBossConfiguration" factoryName="Local" APPLICATION_SERVER_NAME="JBoss/WildFly 31.0.1.Final" ALTERNATIVE_JRE_ENABLED="true" ALTERNATIVE_JRE_PATH="17">
       <option name="BROWSER_ID" value="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" />
@@ -161,8 +167,17 @@
       <workItem from="1776710730086" duration="1405000" />
       <workItem from="1776712221713" duration="12654000" />
       <workItem from="1776851858400" duration="7629000" />
-      <workItem from="1776932996976" duration="3412000" />
+      <workItem from="1776932996976" duration="4325000" />
     </task>
+    <task id="LOCAL-00001" summary="fix dynmicprocedure">
+      <option name="closed" value="true" />
+      <created>1776936910737</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1776936910737</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,6 +193,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fix dynmicprocedure" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix dynmicprocedure" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/muhasebe_backend$wildfly.ic" NAME="wildfly Coverage Results" MODIFIED="1776711849073" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
