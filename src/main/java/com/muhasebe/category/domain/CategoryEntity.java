@@ -20,7 +20,7 @@ public class CategoryEntity extends BaseAuditingEntity {
     @Column(name = "description", length = 500)
     private String description;
 
-    /** Parent category - hiyerarsik yapi icin (Angular'daki categoryName parent-child). */
+    // sonsuz kategori mantığı dinamik olarak alt kategori oluşturmak için join değil manuel çalışır, döngü hatası almamak için
     @Column(name = "parent_id")
     private Long parentId;
 

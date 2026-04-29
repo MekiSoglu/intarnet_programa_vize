@@ -12,12 +12,8 @@ import jakarta.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Tablo iliski metadatasi servisi.
- *
- * @Stateless EJB: Container-Managed Transaction (CMT) sayesinde her metod otomatik
- * transaction icinde calisir. Spring'deki @Transactional'in EJB karsiligi.
- */
+//threat safe
+//oluşturulan dinami tablolar arasındaki ilşkileri kaydeder
 @Stateless
 public class TableMapService extends BaseService<TableMapEntity, TableMapRepository> {
 
@@ -29,7 +25,7 @@ public class TableMapService extends BaseService<TableMapEntity, TableMapReposit
         return repository;
     }
 
-    /** Verilen tablonun iliski tiplerini sirayla getir. */
+    //ilşki tiplerini getir
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<String> getRelationTypes(String tableName) {
         return repository.findByTableName(tableName).stream()
@@ -45,7 +41,6 @@ public class TableMapService extends BaseService<TableMapEntity, TableMapReposit
                 .collect(Collectors.toList());
     }
 
-    /** Yeni iliski kaydi olustur. */
     public TableMapEntity saveRelation(String tableName, String relatedTable,
                                         String relationType, String relationColumn,
                                         String joinTableName, String fkColumnName) {
@@ -59,12 +54,10 @@ public class TableMapService extends BaseService<TableMapEntity, TableMapReposit
         return repository.save(e);
     }
 
-    /** Bir tablo silindiginde tum iliskilerini temizle. */
     public int deleteAllRelationsOf(String tableName) {
         return repository.deleteByTableName(tableName);
     }
 
-    /** Tum iliskileri getir (UI listesi icin). */
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<TableMapEntity> findAllRelations() {
         return repository.findAll();

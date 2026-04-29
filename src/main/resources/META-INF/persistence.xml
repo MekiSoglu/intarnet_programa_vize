@@ -6,9 +6,7 @@
              version="3.0">
 
     <persistence-unit name="muhasebePU" transaction-type="JTA">
-
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-
         <jta-data-source>jdbc/MuhasebeDS</jta-data-source>
 
         <class>com.muhasebe.category.domain.CategoryEntity</class>
@@ -19,13 +17,10 @@
         <class>com.muhasebe.tablemap.domain.SystemLogEntity</class>
         <class>com.muhasebe.user.domain.UserEntity</class>
 
-
-
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
 
         <properties>
             <property name="eclipselink.target-database" value="PostgreSQL"/>
-            <property name="eclipselink.target-server" value="JBoss"/>
             <property name="eclipselink.ddl-generation" value="none"/>
             <property name="eclipselink.logging.level" value="INFO"/>
             <property name="eclipselink.logging.level.sql" value="FINE"/>
@@ -35,5 +30,4 @@
         </properties>
 
     </persistence-unit>
-
 </persistence>

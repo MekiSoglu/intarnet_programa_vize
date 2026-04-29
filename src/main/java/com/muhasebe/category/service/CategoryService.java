@@ -32,6 +32,7 @@ public class CategoryService extends BaseService<CategoryEntity, CategoryReposit
         return repository.findByParentId(parentId);
     }
 
+    //tabloyu childlar ile birlikte temizle
     public DeletionSummary deleteWithCascade(Long categoryId) {
         DeletionSummary summary = new DeletionSummary();
         List<Long> allIds = collectDescendantIds(categoryId);
@@ -46,6 +47,7 @@ public class CategoryService extends BaseService<CategoryEntity, CategoryReposit
         return summary;
     }
 
+    //baseden childa tüm alt kategoriler
     private List<Long> collectDescendantIds(Long rootId) {
         List<Long> result = new ArrayList<>();
         result.add(rootId);
@@ -55,6 +57,7 @@ public class CategoryService extends BaseService<CategoryEntity, CategoryReposit
         return result;
     }
 
+    //silme sırasında ne kadar verinin silineceği bilgisi
     public DeletionSummary previewDelete(Long categoryId) {
         DeletionSummary summary = new DeletionSummary();
         List<Long> allIds = collectDescendantIds(categoryId);

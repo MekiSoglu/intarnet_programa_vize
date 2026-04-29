@@ -20,6 +20,7 @@ com/muhasebe/user/domain/UserEntity.class
 com/muhasebe/tablemap/repository/DynamicProcedureRepository.class
 com/muhasebe/tablemap/domain/TableMapEntity.class
 com/muhasebe/dynamic/dml/DynamicTableService.class
+com/muhasebe/web/bean/UserManagementBean.class
 com/muhasebe/base/domain/BaseAuditingEntity.class
 com/muhasebe/web/bean/ViewDataBean.class
 com/muhasebe/web/converter/EntityConverter.class

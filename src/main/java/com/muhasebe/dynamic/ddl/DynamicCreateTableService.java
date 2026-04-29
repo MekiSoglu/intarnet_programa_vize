@@ -98,6 +98,7 @@ public class DynamicCreateTableService {
         log.info("Olusturulan SQL: " + sql);
         em.createNativeQuery(sql.toString()).executeUpdate();
 
+        //tablonun hangi kategoriye ekleneceği ör makine -> bekoloder
         Query insertQ = em.createNativeQuery(
                 "INSERT INTO dynamic_tables (table_name, category_id, created_by, version) " +
                         "VALUES (?1, CAST(?2 AS BIGINT), 'system', 1)");
@@ -156,6 +157,7 @@ public class DynamicCreateTableService {
         createTable(rawTableName, columns, foreignKeys, enableAlarm, null);
     }
 
+    // tabloya fk ekleme
     private void processForeignKey(String tableName, Map<String, String> fk) {
         String relationType = fk.get("relation");
         String referencedTable = validator.normalize(fk.get("references"));
@@ -202,9 +204,7 @@ public class DynamicCreateTableService {
         }
     }
 
-    // ============================================================
     //  CREATE EMPTY TABLE (FK target'i yoksa olusturmak icin)
-    // ============================================================
     public void createEmptyTable(String rawTableName) {
         String tableName = validator.normalize(rawTableName);
         validator.validateOrThrow(tableName, "Tablo adi");
@@ -296,9 +296,7 @@ public class DynamicCreateTableService {
         return "Tablo basariyla silindi: " + tableName;
     }
 
-    // ============================================================
     //  LISTING / METADATA
-    // ============================================================
     @SuppressWarnings("unchecked")
     public List<String> listAllTables() {
         return em.createNativeQuery(
@@ -360,10 +358,7 @@ public class DynamicCreateTableService {
     }
 
 
-    /**
-     * Verilen tablonun enum kolonlarini ve deger listelerini dondurur.
-     * Donus: { "durum": ["odenmedi", "odendi"] }
-     */
+    //enum değeri güncelle
     @SuppressWarnings("unchecked")
     public Map<String, List<String>> getEnumColumns(String rawTableName) {
         String tableName = validator.normalize(rawTableName);

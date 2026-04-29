@@ -10,22 +10,7 @@ import jakarta.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Generic CRUD DAO. Tum repository'ler bunu extend eder.
- *
- * BUG FIX (eski koda gore):
- *  - Spring Data JpaRepository'nin yerini DAO pattern aliyor.
- *  - Cache annotation'lari kaldirildi (eski kodda @Cacheable yer yer NPE'ye sebep oluyordu).
- *  - Tum sorgular CriteriaBuilder veya named query ile -> SQL injection guvenli.
- *
- * Subclass kullanim ornegi:
- *   {@code
- *   @ApplicationScoped
- *   public class CategoryRepository extends BaseRepository<CategoryEntity> {
- *       public CategoryRepository() { super(CategoryEntity.class); }
- *   }
- *   }
- */
+
 public abstract class BaseRepository<E extends BaseEntity> {
 
     @PersistenceContext(unitName = "muhasebePU")
@@ -100,14 +85,18 @@ public abstract class BaseRepository<E extends BaseEntity> {
 
     // ---------- UTIL ----------
 
+    //Bellekteki değişiklikler DB'ye SQL olarak yazılır.
     public void flush() {
         em.flush();
     }
+
+    //nesne takibini bırak
 
     public void detach(E entity) {
         em.detach(entity);
     }
 
+    // nesneyi tekrar takibe al
     public E attach(E entity) {
         if (em.contains(entity)) return entity;
         if (entity.getId() == null) {

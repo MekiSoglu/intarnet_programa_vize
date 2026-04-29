@@ -9,15 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-/**
- * URL koruyucu filter.
- *
- * Korumali path'ler: /pages/* (tum is sayfalari)
- * Acik path'ler:    /login.xhtml, /jakarta.faces.resource/*, /resources/*
- *
- * Login degilse -> /login.xhtml'e yonlendir
- * AJAX istegiyse -> partial-response ile redirect
- */
 @WebFilter(filterName = "AuthFilter", urlPatterns = {"/pages/*", "/index.xhtml"})
 public class AuthFilter implements Filter {
 
@@ -32,26 +23,50 @@ public class AuthFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
 
         boolean loggedIn = sessionBean != null && sessionBean.isLoggedIn();
-        if (loggedIn) {
-            chain.doFilter(request, response);
+        if (!loggedIn) {
+            redirectToLogin(request, response);
             return;
         }
 
-        String loginUrl = request.getContextPath() + "/login.xhtml";
+        // ADMIN-only sayfalar - URL bazli ekstra koruma
+        String path = request.getRequestURI().substring(request.getContextPath().length());
+        if (isAdminOnlyPath(path) && !sessionBean.isAdmin()) {
+            redirectToHome(request, response);
+            return;
+        }
 
-        if (isAjaxRequest(request)) {
-            response.setContentType("text/xml");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(
+        chain.doFilter(request, response);
+    }
+
+    private boolean isAdminOnlyPath(String path) {
+        return path.startsWith("/pages/users/")
+                || path.startsWith("/pages/categories/list")
+                || path.startsWith("/pages/categories/details")
+                || path.startsWith("/pages/tables/create")
+                || path.startsWith("/pages/views/create")
+                || path.startsWith("/pages/procedures/create")
+                || path.startsWith("/pages/logs/");
+    }
+
+    private void redirectToLogin(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String url = req.getContextPath() + "/login.xhtml";
+        if (isAjaxRequest(req)) {
+            resp.setContentType("text/xml");
+            resp.setCharacterEncoding("UTF-8");
+            resp.getWriter().write(
                     "<?xml version='1.0' encoding='UTF-8'?>" +
-                            "<partial-response><redirect url=\"" + loginUrl + "\"/></partial-response>");
+                            "<partial-response><redirect url=\"" + url + "\"/></partial-response>");
         } else {
-            response.sendRedirect(loginUrl);
+            resp.sendRedirect(url);
         }
     }
 
+    private void redirectToHome(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String url = req.getContextPath() + "/index.xhtml";
+        resp.sendRedirect(url);
+    }
+
     private boolean isAjaxRequest(HttpServletRequest request) {
-        String facesRequest = request.getHeader("Faces-Request");
-        return "partial/ajax".equals(facesRequest);
+        return "partial/ajax".equals(request.getHeader("Faces-Request"));
     }
 }

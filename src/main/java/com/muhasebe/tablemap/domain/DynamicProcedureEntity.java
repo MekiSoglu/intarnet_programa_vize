@@ -6,10 +6,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * Kullanicinin tanimladigi dinamik procedure'lerin metadatasi.
- * Asil procedure PostgreSQL icinde saklaniyor; bu tablo sadece UI'da listelemek icin.
- */
+//asıl veriler metadatan alınıyor bu kısım sadece uı da hızlıca listelemek için
 @Entity
 @Table(name = "dynamic_procedures")
 public class DynamicProcedureEntity implements BaseEntity, Serializable {

@@ -3,14 +3,7 @@ package com.muhasebe.tablemap.domain;
 import com.muhasebe.base.domain.BaseAuditingEntity;
 import jakarta.persistence.*;
 
-/**
- * Tablo iliskilerini saklayan metadata entity.
- *
- * BUG FIX: Eski projede join_table_name ve fk_column_name yoktu.
- *          Many-to-many ara tablo ismi her seferinde information_schema'dan tahmin ediliyordu
- *          (table1_table2 ya da table2_table1?). Bu ambiguity many-to-many bug'larin kaynagiydi.
- *          Simdi adi dogrudan burada saklayacagiz.
- */
+//tablolar arası ilişki burada saklanır metadatan almak riskli
 @Entity
 @Table(name = "table_map")
 public class TableMapEntity extends BaseAuditingEntity {

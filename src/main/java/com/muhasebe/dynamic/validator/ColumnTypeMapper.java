@@ -15,10 +15,11 @@ public class ColumnTypeMapper {
         if (logicalType == null) {
             throw new IllegalArgumentException("Kolon tipi belirtilmedi");
         }
+        //dinamik sql çevirisi
         return switch (logicalType.toLowerCase().trim()) {
             case "number", "integer", "int" -> "INTEGER";
             case "bigint", "long"           -> "BIGINT";
-            case "decimal", "money", "para" -> "NUMERIC(19,4)";   // YENI - muhasebe icin
+            case "decimal", "money", "para" -> "NUMERIC(19,4)";
             case "double", "float"          -> "DOUBLE PRECISION";
             case "varchar", "string", "text"-> "VARCHAR(255)";
             case "longtext"                 -> "TEXT";

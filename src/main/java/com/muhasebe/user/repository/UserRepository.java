@@ -4,6 +4,7 @@ import com.muhasebe.base.repository.BaseRepository;
 import com.muhasebe.user.domain.UserEntity;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
@@ -21,5 +22,12 @@ public class UserRepository extends BaseRepository<UserEntity> {
                  .getResultList()
                  .stream()
                  .findFirst();
+    }
+
+    public List<UserEntity> findAllOrderByUsername() {
+        return em.createQuery(
+                         "SELECT u FROM UserEntity u ORDER BY u.username",
+                         UserEntity.class)
+                 .getResultList();
     }
 }

@@ -28,9 +28,7 @@ public class DynamicTableService {
     @Inject
     private TableMapRepository tableMapRepository;
 
-    // ============================================================
     //  INSERT
-    // ============================================================
     public Long insertIntoTable(String rawTableName, Map<String, Object> values) {
         String tableName = validator.normalize(rawTableName);
         validator.validateOrThrow(tableName, "Tablo adi");
@@ -40,7 +38,7 @@ public class DynamicTableService {
             throw new IllegalArgumentException("Eklenecek deger bulunamadi");
         }
 
-        // 1. Tablonun kolon tiplerini veritabanından çek (Tip dönüşümü için şart)
+        // 1. Tablonun kolon tiplerini veritabanından çek
         Map<String, String> columnTypes = new HashMap<>();
         List<Object[]> typeResults = em.createNativeQuery(
                                                "SELECT column_name, data_type FROM information_schema.columns WHERE table_schema = 'public' AND table_name = ?")
@@ -143,6 +141,7 @@ public class DynamicTableService {
         }
     }
 
+    //many to many de ara tabloya veri atar
     public void insertManyToMany(TableMapEntity relation, Long mainId, List<Long> relatedIds) {
         String joinTable = relation.getJoinTableName();
         if (joinTable == null) {
@@ -178,6 +177,7 @@ public class DynamicTableService {
         return ids;
     }
 
+    // güvenli long dönüşümü
     private void addAsLong(List<Long> list, Object item) {
         if (item == null) return;
         if (item instanceof Number) {
@@ -194,9 +194,7 @@ public class DynamicTableService {
         }
     }
 
-    // ============================================================
-    //  UPDATE
-    // ============================================================
+
     public void updateTable(String rawTableName, Long id, Map<String, Object> updates) {
         String tableName = validator.normalize(rawTableName);
         validator.validateOrThrow(tableName, "Tablo adi");
@@ -262,9 +260,7 @@ public class DynamicTableService {
         }
     }
 
-    // ============================================================
-    //  DELETE
-    // ============================================================
+
     public void deleteFromTable(String rawTableName, Long id) {
         String tableName = validator.normalize(rawTableName);
         validator.validateOrThrow(tableName, "Tablo adi");
@@ -276,9 +272,7 @@ public class DynamicTableService {
           .executeUpdate();
     }
 
-    // ============================================================
-    //  READ
-    // ============================================================
+    // tablo verileri
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     @SuppressWarnings("unchecked")
     public List<Map<String, Object>> getTableData(String rawTableName) {
@@ -325,14 +319,7 @@ public class DynamicTableService {
         return result;
     }
 
-    /**
-     * FK kolonunun ham ID degerini, iliskili tablodaki display kolonunun metnine donusturur.
-     *
-     * Ornek: firima_id = 1  ->  firima_id = "Ozgocce"
-     *
-     * Ham ID degeri kaybolmasin diye "<fkCol>_raw" anahtarinda saklanir; edit dialog'u
-     * dropdown'da secili ID'yi bu alandan okur.
-     */
+    // fk değeri ilşki kurlurken istenilen satır adına dönüştürülür
     @SuppressWarnings("unchecked")
     private void resolveManyToOne(Map<String, Object> rowMap,
                                   Map<String, TableMapEntity> m2oRelations) {
