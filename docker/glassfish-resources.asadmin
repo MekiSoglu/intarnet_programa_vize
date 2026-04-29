@@ -1,0 +1,2 @@
+create-jdbc-connection-pool --datasourceclassname=org.postgresql.ds.PGSimpleDataSource --restype=javax.sql.DataSource --property user=postgres:password=postgres:databaseName=muhasebedb:serverName=postgres:portNumber=5432 MuhasebePool
+create-jdbc-resource --connectionpoolid=MuhasebePool jdbc/MuhasebeDS

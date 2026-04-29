@@ -3,13 +3,12 @@
       xmlns:ui="jakarta.faces.facelets"
       xmlns:h="jakarta.faces.html">
 <ui:composition template="/pages/templates/layout.xhtml">
-
     <ui:define name="title">Muhasebe - Dashboard</ui:define>
-
     <ui:define name="content">
+
         <div class="hero">
-            <h1>Dinamik Muhasebe Sistemi</h1>
-            <p>Kod yazmadan tablolar olusturup islem tanimlayabilirsin.</p>
+            <h1>Hosgeldin, #{sessionBean.currentUser.fullName}</h1>
+            <p>Dinamik Muhasebe Sistemi - Kod yazmadan tablolar olusturup islem tanimlayabilirsin.</p>
         </div>
 
         <div class="stat-grid">
@@ -17,7 +16,6 @@
                 <div class="stat-label">Kategori</div>
                 <div class="stat-value">#{homeBean.categoryCount}</div>
             </div>
-
             <div class="stat-card accent-orange">
                 <div class="stat-label">Dinamik Tablo</div>
                 <div class="stat-value">#{homeBean.tableCount}</div>
@@ -54,7 +52,7 @@
                 <h:link outcome="/pages/categories/araclar.xhtml" value="Git &#187;" styleClass="btn-link"/>
             </div>
         </div>
-    </ui:define>
 
+    </ui:define>
 </ui:composition>
 </html>

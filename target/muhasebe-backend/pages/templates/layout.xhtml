@@ -5,126 +5,171 @@
       xmlns:f="jakarta.faces.core"
       xmlns:p="http://primefaces.org/ui">
 <f:view contentType="text/html" encoding="UTF-8">
-<h:head>
-    <meta charset="UTF-8"/>
-    <title><ui:insert name="title">Muhasebe</ui:insert></title>
-    <h:outputStylesheet name="css/app.css"/>
-</h:head>
+    <h:head>
+        <meta charset="UTF-8"/>
+        <title><ui:insert name="title">Muhasebe</ui:insert></title>
+        <h:outputStylesheet name="css/app.css"/>
+        <style type="text/css">
+            .user-bar {
+                display: flex; align-items: center; justify-content: flex-end;
+                gap: 16px;
+                padding: 12px 24px;
+                background: #2d3640;
+                border-bottom: 1px solid #1e272e;
+                color: #ddd;
+                font-size: 13px;
+            }
+            .user-bar .user-info { display: flex; align-items: center; gap: 8px; }
+            .user-bar .role-badge {
+                padding: 2px 10px; border-radius: 12px; font-size: 11px;
+                font-weight: 600; letter-spacing: 0.3px;
+            }
+            .user-bar .role-admin     { background: #c0392b; color: #fff; }
+            .user-bar .role-kullanici { background: #2980b9; color: #fff; }
+            .user-bar .logout-btn {
+                background: transparent; border: 1px solid #e74c3c; color: #e74c3c;
+                padding: 5px 14px; border-radius: 6px; font-size: 12px;
+                cursor: pointer; text-decoration: none;
+            }
+            .user-bar .logout-btn:hover { background: #e74c3c; color: #fff; }
+        </style>
+    </h:head>
 
-<h:body>
+    <h:body>
 
-<div class="app-layout">
+        <div class="app-layout">
 
-    <!-- ============ SIDEBAR ============ -->
-    <aside class="sidebar">
-        <div class="brand">
-            <h:link outcome="/index.xhtml">
-                <span class="brand-icon">&#128202;</span>
-                <span class="brand-text">Muhasebe</span>
-            </h:link>
+            <!-- ============ SIDEBAR ============ -->
+            <aside class="sidebar">
+                <div class="brand">
+                    <h:link outcome="/index.xhtml">
+                        <span class="brand-icon">&#128202;</span>
+                        <span class="brand-text">Muhasebe</span>
+                    </h:link>
+                </div>
+
+                <nav class="sidenav">
+                    <ul>
+                        <li>
+                            <h:link outcome="/index.xhtml">
+                                <span class="icon">&#127968;</span> Home
+                            </h:link>
+                        </li>
+
+                        <!-- Category grubu - sadece ADMIN -->
+                        <h:panelGroup layout="block" rendered="#{sessionBean.admin}">
+                            <li class="group">
+                                <div class="group-header" onclick="toggleSub(this)">
+                                    <span class="icon">&#128193;</span> Category
+                                    <span class="arrow">&#9662;</span>
+                                </div>
+                                <ul class="submenu">
+                                    <li><h:link outcome="/pages/categories/list.xhtml" value="Create Category"/></li>
+                                    <li><h:link outcome="/pages/categories/details.xhtml" value="Create Details"/></li>
+                                </ul>
+                            </li>
+                        </h:panelGroup>
+
+                        <li>
+                            <h:link outcome="/pages/categories/araclar.xhtml">
+                                <span class="icon">&#128663;</span> Arac / Kategoriler
+                            </h:link>
+                        </li>
+
+                        <!-- Create Table - sadece ADMIN -->
+                        <h:panelGroup layout="block" rendered="#{sessionBean.admin}">
+                            <li>
+                                <h:link outcome="/pages/tables/create.xhtml">
+                                    <span class="icon">&#128202;</span> Create Table
+                                </h:link>
+                            </li>
+                        </h:panelGroup>
+
+                        <li>
+                            <h:link outcome="/pages/tables/list.xhtml">
+                                <span class="icon">&#128203;</span> Tablolarim
+                            </h:link>
+                        </li>
+
+                        <!-- Cari (View) grubu - Create sadece ADMIN -->
+                        <li class="group">
+                            <div class="group-header" onclick="toggleSub(this)">
+                                <span class="icon">&#129534;</span> Cari
+                                <span class="arrow">&#9662;</span>
+                            </div>
+                            <ul class="submenu">
+                                <h:panelGroup layout="block" rendered="#{sessionBean.admin}">
+                                    <li><h:link outcome="/pages/views/create.xhtml" value="Cari Olustur"/></li>
+                                </h:panelGroup>
+                                <li><h:link outcome="/pages/views/list.xhtml" value="Carilerim"/></li>
+                            </ul>
+                        </li>
+
+                        <!-- Islem Tanimla - sadece ADMIN -->
+                        <h:panelGroup layout="block" rendered="#{sessionBean.admin}">
+                            <li>
+                                <h:link outcome="/pages/procedures/create.xhtml">
+                                    <span class="icon">&#10133;</span> Islem Tanimla
+                                </h:link>
+                            </li>
+                        </h:panelGroup>
+
+                        <li>
+                            <h:link outcome="/pages/procedures/list.xhtml">
+                                <span class="icon">&#129518;</span> Islemlerim
+                            </h:link>
+                        </li>
+
+                        <!-- Islem Gecmisi - sadece ADMIN -->
+                        <h:panelGroup layout="block" rendered="#{sessionBean.admin}">
+                            <li>
+                                <h:link outcome="/pages/logs/list.xhtml">
+                                    <span class="icon">&#128220;</span> Islem Gecmisi
+                                </h:link>
+                            </li>
+                        </h:panelGroup>
+
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- ============ MAIN CONTENT ============ -->
+            <main class="main-content">
+
+                <!-- User bar - giris yapan kullanici + cikis -->
+                <h:panelGroup layout="block" styleClass="user-bar" rendered="#{sessionBean.loggedIn}">
+                    <div class="user-info">
+                        <span>&#128100;</span>
+                        <span>#{sessionBean.currentUser.fullName}</span>
+                        <h:outputText value="#{sessionBean.currentUser.role}"
+                                      styleClass="role-badge #{sessionBean.admin ? 'role-admin' : 'role-kullanici'}"/>
+                    </div>
+                    <h:form style="margin: 0;">
+                        <h:commandLink action="#{loginBean.logout}" value="Cikis"
+                                       styleClass="logout-btn"/>
+                    </h:form>
+                </h:panelGroup>
+
+                <h:messages globalOnly="true" styleClass="messages"
+                            infoClass="msg-info" errorClass="msg-error" warnClass="msg-warn"/>
+
+                <p:growl id="growl" showDetail="true" life="4000"/>
+
+                <ui:insert name="content">Icerik</ui:insert>
+            </main>
+
         </div>
 
-        <nav class="sidenav">
-            <ul>
-                <li>
-                    <h:link outcome="/index.xhtml">
-                        <span class="icon">&#127968;</span> Home
-                    </h:link>
-                </li>
+        <script>
+            function toggleSub(el) {
+                var ul = el.nextElementSibling;
+                if (ul) {
+                    ul.classList.toggle('open');
+                    el.classList.toggle('expanded');
+                }
+            }
+        </script>
 
-                <!-- Category grubu -->
-                <li class="group">
-                    <div class="group-header" onclick="toggleSub(this)">
-                        <span class="icon">&#128193;</span> Category
-                        <span class="arrow">&#9662;</span>
-                    </div>
-                    <ul class="submenu">
-                        <li><h:link outcome="/pages/categories/list.xhtml" value="Create Category"/></li>
-                        <li><h:link outcome="/pages/categories/details.xhtml" value="Create Details"/></li>
-                    </ul>
-                </li>
-
-
-
-                <li>
-                    <h:link outcome="/pages/categories/araclar.xhtml">
-                        <span class="icon">&#128663;</span> Arac / Kategoriler
-                    </h:link>
-                </li>
-
-                <!-- Dinamik Tablolar grubu -->
-                <li>
-                    <h:link outcome="/pages/tables/create.xhtml">
-                        <span class="icon">&#128202;</span> Create Table
-                    </h:link>
-                </li>
-
-                <li>
-                    <h:link outcome="/pages/tables/list.xhtml">
-                        <span class="icon">&#128203;</span> Tablolarim
-                    </h:link>
-                </li>
-
-                <!-- Cari (View) grubu -->
-                <li class="group">
-                    <div class="group-header" onclick="toggleSub(this)">
-                        <span class="icon">&#129534;</span> Cari
-                        <span class="arrow">&#9662;</span>
-                    </div>
-                    <ul class="submenu">
-                        <li><h:link outcome="/pages/views/create.xhtml" value="Cari Olustur"/></li>
-                        <li><h:link outcome="/pages/views/list.xhtml" value="Carilerim"/></li>
-                    </ul>
-                </li>
-
-                <!-- Islemler (Procedure) grubu -->
-                <li>
-                    <h:link outcome="/pages/procedures/create.xhtml">
-                        <span class="icon">&#10133;</span> Islem Tanimla
-                    </h:link>
-                </li>
-
-                <li>
-                    <h:link outcome="/pages/procedures/list.xhtml">
-                        <span class="icon">&#129518;</span> Islemlerim
-                    </h:link>
-                </li>
-
-                <li>
-                    <h:link outcome="/pages/logs/list.xhtml">
-                        <span class="icon">&#128220;</span> Islem Gecmisi
-                    </h:link>
-                </li>
-
-
-
-            </ul>
-        </nav>
-    </aside>
-
-    <!-- ============ MAIN CONTENT ============ -->
-    <main class="main-content">
-
-        <h:messages globalOnly="true" styleClass="messages"
-                    infoClass="msg-info" errorClass="msg-error" warnClass="msg-warn"/>
-
-        <p:growl id="growl" showDetail="true" life="4000"/>
-
-        <ui:insert name="content">Icerik</ui:insert>
-    </main>
-
-</div>
-
-<script>
-    function toggleSub(el) {
-        var ul = el.nextElementSibling;
-        if (ul) {
-            ul.classList.toggle('open');
-            el.classList.toggle('expanded');
-        }
-    }
-</script>
-
-</h:body>
+    </h:body>
 </f:view>
 </html>

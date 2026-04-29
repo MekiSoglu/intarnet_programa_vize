@@ -123,3 +123,24 @@ CREATE TABLE IF NOT EXISTS sistem_loglari (
     detay     TEXT,
     tarih     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
+
+
+
+-- ============ AUTHENTICATION ============
+CREATE TABLE IF NOT EXISTS app_users (
+                                         id            BIGSERIAL PRIMARY KEY,
+                                         username      VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,    -- BCrypt hash
+    role          VARCHAR(50)  NOT NULL,    -- ADMIN | KULLANICI
+    full_name     VARCHAR(255),
+    created_date  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login    TIMESTAMP
+    );
+
+CREATE INDEX IF NOT EXISTS idx_app_users_username ON app_users(username);
+
+-- Default admin kullanicisi: admin / admin123
+-- BCrypt hash 'admin123' icin asagidaki - cost factor 10
+INSERT INTO app_users (username, password_hash, role, full_name)
+VALUES ('admin', '$2a$10$lO8W8aSvx1PRp1rzfD6jNu7PLT4g9OvhQtWDW0ukPRWU/MK.8rQiO', 'ADMIN', 'Sistem Yoneticisi')
+    ON CONFLICT (username) DO NOTHING;

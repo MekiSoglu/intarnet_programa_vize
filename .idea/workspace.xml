@@ -9,17 +9,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="794ad98a-c937-47b7-9504-4e4e96186cb8" name="Changes" comment="fix dynmicprocedure">
+    <list default="true" id="794ad98a-c937-47b7-9504-4e4e96186cb8" name="Changes" comment="add dynamic query">
+      <change afterPath="$PROJECT_DIR$/docker/entrypoint.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker/glassfish-resources.asadmin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/muhasebe/dynamic/query/DynamicQueryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/muhasebe/dynamic/query/DynamicQueryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/muhasebe/web/bean/TableDataBean.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/muhasebe/web/bean/TableDataBean.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/pages/tables/data.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/pages/tables/data.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/resources/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/resources/css/app.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/datasource.cli" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker/postgresql-module.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/muhasebe/dynamic/ddl/DynamicCreateTableService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/muhasebe/dynamic/ddl/DynamicCreateTableService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/muhasebe/dynamic/join/DynamicJoinViewService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/muhasebe/dynamic/join/DynamicJoinViewService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/muhasebe/dynamic/procedure/DynamicProcedureService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/muhasebe/dynamic/procedure/DynamicProcedureService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/muhasebe/web/bean/ProcedureExecuteBean.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/muhasebe/web/bean/ProcedureExecuteBean.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/muhasebe/dynamic/query/DynamicQueryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/muhasebe/dynamic/query/DynamicQueryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/muhasebe/web/bean/TableDataBean.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/muhasebe/web/bean/TableDataBean.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend.war" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend.war" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/META-INF/jboss-deployment-structure.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/dynamic/ddl/DynamicCreateTableService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/dynamic/ddl/DynamicCreateTableService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/dynamic/join/DynamicJoinViewService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/dynamic/join/DynamicJoinViewService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/dynamic/procedure/DynamicProcedureService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/dynamic/procedure/DynamicProcedureService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/web/bean/ProcedureExecuteBean.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/web/bean/ProcedureExecuteBean.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/pages/procedures/execute.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend/pages/procedures/execute.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/dynamic/query/DynamicQueryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/dynamic/query/DynamicQueryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/web/bean/TableDataBean.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend/WEB-INF/classes/com/muhasebe/web/bean/TableDataBean.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/pages/tables/data.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend/pages/tables/data.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/muhasebe-backend/resources/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/target/muhasebe-backend/resources/css/app.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +48,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="fix_procedure" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -167,7 +179,7 @@
       <workItem from="1776710730086" duration="1405000" />
       <workItem from="1776712221713" duration="12654000" />
       <workItem from="1776851858400" duration="7629000" />
-      <workItem from="1776932996976" duration="4325000" />
+      <workItem from="1776932996976" duration="6913000" />
     </task>
     <task id="LOCAL-00001" summary="fix dynmicprocedure">
       <option name="closed" value="true" />
@@ -177,7 +189,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776936910737</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add dynamic query">
+      <option name="closed" value="true" />
+      <created>1776937831632</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1776937831632</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -196,7 +216,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fix dynmicprocedure" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix dynmicprocedure" />
+    <MESSAGE value="add dynamic query" />
+    <option name="LAST_COMMIT_MESSAGE" value="add dynamic query" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/muhasebe_backend$wildfly.ic" NAME="wildfly Coverage Results" MODIFIED="1776711849073" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Muhasebe - Giris</title>
+    <h:outputStylesheet name="css/app.css"/>
+    <style type="text/css">
+        body {
+            background: #1e272e;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; margin: 0;
+        }
+        .login-card {
+            background: #2d3640; padding: 40px; border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            min-width: 360px;
+        }
+        .login-card h2 { margin: 0 0 24px 0; text-align: center; color: #fff; }
+        .login-card label {
+            display: block; margin: 12px 0 6px 0; font-size: 14px; color: #ccc;
+        }
+        .login-card input {
+            width: 100%; box-sizing: border-box;
+            padding: 10px 12px; border-radius: 6px; border: 1px solid #3d4651;
+            background: #1e272e; color: #fff; font-size: 14px;
+        }
+        .login-card input:focus { outline: none; border-color: #4a90e2; }
+        .login-btn {
+            width: 100%; margin-top: 20px; padding: 12px;
+            background: #27ae60; color: #fff; border: 0;
+            border-radius: 6px; font-size: 14px; font-weight: 600;
+            cursor: pointer;
+        }
+        .login-btn:hover { background: #2ecc71; }
+        .error-msg {
+            background: #c0392b; color: #fff; padding: 10px; border-radius: 6px;
+            margin-bottom: 16px; font-size: 13px;
+        }
+    </style>
+</h:head>
+<h:body>
+    <div class="login-card">
+        <h2>Muhasebe Sistemi</h2>
+
+        <h:messages styleClass="error-msg" globalOnly="true" layout="list"/>
+
+        <h:form>
+            <label>Kullanici Adi</label>
+            <h:inputText value="#{loginBean.username}" required="true"
+                         requiredMessage="Kullanici adi zorunlu"/>
+
+            <label>Sifre</label>
+            <h:inputSecret value="#{loginBean.password}" required="true"
+                           requiredMessage="Sifre zorunlu"/>
+
+            <h:commandButton value="Giris Yap" action="#{loginBean.login}"
+                             styleClass="login-btn"/>
+        </h:form>
+    </div>
+</h:body>
+</html>

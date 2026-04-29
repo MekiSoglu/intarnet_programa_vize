@@ -9,7 +9,7 @@
 
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
-        <jta-data-source>java:/MuhasebeDS</jta-data-source>
+        <jta-data-source>jdbc/MuhasebeDS</jta-data-source>
 
         <class>com.muhasebe.category.domain.CategoryEntity</class>
         <class>com.muhasebe.category.domain.CategoryDetailsEntity</class>
@@ -17,6 +17,8 @@
         <class>com.muhasebe.tablemap.domain.ViewMap</class>
         <class>com.muhasebe.tablemap.domain.DynamicProcedureEntity</class>
         <class>com.muhasebe.tablemap.domain.SystemLogEntity</class>
+        <class>com.muhasebe.user.domain.UserEntity</class>
+
 
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
