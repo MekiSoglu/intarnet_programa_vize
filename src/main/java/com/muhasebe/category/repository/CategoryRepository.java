@@ -12,7 +12,7 @@ public class CategoryRepository extends BaseRepository<CategoryEntity> {
         super(CategoryEntity.class);
     }
 
-    /** Root (parent_id = null) kategorileri getir. */
+    //base categoriyi çağırır
     public List<CategoryEntity> findRoots() {
         return em.createQuery(
                 "SELECT c FROM CategoryEntity c WHERE c.parentId IS NULL ORDER BY c.name",
@@ -20,7 +20,7 @@ public class CategoryRepository extends BaseRepository<CategoryEntity> {
                 .getResultList();
     }
 
-    /** Belirli bir parent'in cocuklarini getir. */
+    // üst kategorinini alt kategorilerini getirir
     public List<CategoryEntity> findByParentId(Long parentId) {
         return em.createQuery(
                 "SELECT c FROM CategoryEntity c WHERE c.parentId = :pid ORDER BY c.name",

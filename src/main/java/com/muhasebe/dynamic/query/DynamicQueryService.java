@@ -15,14 +15,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-/**
- * Basit dinamik sorgu servisi: tableName + columnName + value -> SELECT * WHERE col = value.
- *
- * Eski koddaki DynamicQueryService'in temizlenmis versiyonu.
- * BUG FIX: M2M FK sorgusunda join_table_name metadata'dan aliniyor (tahmin yok).
- */
+
 @Stateless
 @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+// javada önceden isimleri belli olamayan (nesne oluştulmamş) yapılara run time da istek atamasın bu sınıf Native sql kullanark
+//önceden hazırmış gibi sorgu atar gelen veriyi java nesnesi gibi dönüştürür
 public class DynamicQueryService {
 
     @PersistenceContext(unitName = "muhasebePU")
@@ -66,6 +63,7 @@ public class DynamicQueryService {
         return result;
     }
 
+    //sql map dönüşümü
     @SuppressWarnings("unchecked")
     private List<Map<String, Object>> queryToMaps(String sql, Object value) {
         Query q = em.createNativeQuery(sql);
@@ -89,6 +87,8 @@ public class DynamicQueryService {
         return result;
     }
 
+
+    //java tipi ile sql tipini eşleştirir
     private Object convertValueType(String value) {
         if (value == null) return null;
         // Integer mi?

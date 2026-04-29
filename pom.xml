@@ -35,6 +35,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
         <!-- ==================== EclipseLink (ORM) ==================== -->
         <!-- WildFly varsayilan olarak Hibernate kullanir; EclipseLink'i WAR icine pakcetliyoruz -->
         <dependency>

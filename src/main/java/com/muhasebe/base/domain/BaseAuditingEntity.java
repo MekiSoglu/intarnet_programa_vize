@@ -4,13 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-/**
- * Audit alanlari iceren ortak super-class.
- * Entity'ler @MappedSuperclass yardimiyla bu sinifi extend eder ve audit kolonlarini kazanir.
- *
- * NOT: Spring'deki @CreatedBy/@CreatedDate annotation'larinin Jakarta karsiligi olmadigi icin
- *      audit alanlarini @PrePersist / @PreUpdate ile kendimiz dolduruyoruz.
- */
+
 @MappedSuperclass
 public abstract class BaseAuditingEntity implements BaseEntity {
 

@@ -32,7 +32,7 @@ public class TableMapRepository extends BaseRepository<TableMapEntity> {
                 .getResultList();
     }
 
-    /** Iki tablo arasindaki iliskiyi getir (yon hesaba katmadan). */
+    /** Iki tablo arasindaki iliskiyi getir  */
     public Optional<TableMapEntity> findRelation(String tableA, String tableB) {
         List<TableMapEntity> result = em.createQuery(
                 "SELECT t FROM TableMapEntity t " +
@@ -46,7 +46,7 @@ public class TableMapRepository extends BaseRepository<TableMapEntity> {
         return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
     }
 
-    /** Bir tablonun tum iliskilerini sil (tablo silindiginde temizlik icin). */
+    /** Bir tablonun tum iliskilerini sil  */
     public int deleteByTableName(String tableName) {
         return em.createQuery(
                 "DELETE FROM TableMapEntity t " +

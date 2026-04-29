@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "sistem_loglari")
+//aktif değil
 public class SystemLogEntity implements BaseEntity, Serializable {
 
     @Id

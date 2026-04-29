@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 /**
  * Category icin detay alan tanimlari (ornek: renk, boyut, marka).
  * Bir CategoryEntity birden fazla CategoryDetailsEntity'ye sahip olabilir (M2M).
+ * örnek akllı cihaz altında telefon ram e sahip bilgisayar hem ram hemde ekran kartına sahip ram özeliği üst kategoriye eklenir
  */
 @Entity
 @Table(name = "category_details")
@@ -19,7 +20,7 @@ public class CategoryDetailsEntity extends BaseAuditingEntity {
     private String name;
 
     @Column(name = "data_type", length = 50)
-    private String dataType = "string";  // string, number, boolean, date
+    private String dataType = "string";
 
     @Override public Long getId() { return id; }
     @Override public void setId(Long id) { this.id = id; }

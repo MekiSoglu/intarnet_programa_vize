@@ -10,19 +10,13 @@ import jakarta.faces.convert.FacesConverter;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * JSF selectOneMenu/selectManyMenu icin generic entity converter.
- * Entity'leri ID'leri ile serialize/deserialize eder.
- *
- * Kullanim: <p:selectOneMenu converter="entityConverter">
- *
- * Her render cycle'inda view'deki entity'leri UI cache'ine yaziyor,
- * sonra form submit'te ID'den entity'ye donuyor.
- */
+
 @FacesConverter(value = "entityConverter", managed = true)
 @ApplicationScoped
+// java verilerini dönüştürerek uı a gönderiri cache yapısı var sürekli db ye sorgu atmaz
 public class EntityConverter implements Converter<BaseEntity> {
 
+    //nesneyi tarıyıcının anlayacağı formata çevir
     @Override
     public String getAsString(FacesContext ctx, UIComponent comp, BaseEntity entity) {
         if (entity == null || entity.getId() == null) return "";
@@ -40,6 +34,7 @@ public class EntityConverter implements Converter<BaseEntity> {
         return key;
     }
 
+    //tarayıcıdan gelen metni java ya çevir
     @Override
     public BaseEntity getAsObject(FacesContext ctx, UIComponent comp, String value) {
         if (value == null || value.isBlank()) return null;

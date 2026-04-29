@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/pages/templates/layout.xhtml">
+
+    <ui:define name="title">Kullanici Yonetimi</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h2>Kullanici Yonetimi</h2>
+        </div>
+
+        <!-- ============ YENI KULLANICI EKLEME ============ -->
+        <div class="panel">
+            <h3>Yeni Kullanici Ekle</h3>
+            <h:form id="createForm">
+                <div class="form-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:700px;">
+                    <div>
+                        <label>Kullanici Adi *</label>
+                        <p:inputText value="#{userManagementBean.newUsername}" required="true"
+                                     placeholder="orn: ahmet" style="width:100%;"/>
+                    </div>
+                    <div>
+                        <label>Sifre *</label>
+                        <p:password value="#{userManagementBean.newPassword}" required="true"
+                                    feedback="false" toggleMask="true"
+                                    placeholder="en az 4 karakter" style="width:100%;"/>
+                    </div>
+                    <div>
+                        <label>Tam Ad</label>
+                        <p:inputText value="#{userManagementBean.newFullName}"
+                                     placeholder="orn: Ahmet Yilmaz" style="width:100%;"/>
+                    </div>
+                    <div>
+                        <label>Rol *</label>
+                        <p:selectOneMenu value="#{userManagementBean.newRole}" style="width:100%;">
+                            <f:selectItems value="#{userManagementBean.allRoles}"/>
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+
+                <div class="actions" style="margin-top:16px;">
+                    <p:commandButton value="Kullanici Olustur"
+                                     action="#{userManagementBean.createUser}"
+                                     update=":createForm :usersForm :growl"
+                                     styleClass="btn btn-success"
+                                     icon="pi pi-user-plus"/>
+                </div>
+            </h:form>
+        </div>
+
+        <!-- ============ KULLANICI LISTESI ============ -->
+        <div class="panel">
+            <h3>Tum Kullanicilar (#{userManagementBean.users.size()})</h3>
+
+            <h:form id="usersForm">
+                <p:dataTable value="#{userManagementBean.users}" var="user"
+                             styleClass="app-table" emptyMessage="Kullanici bulunamadi">
+
+                    <p:column headerText="Kullanici Adi">
+                        #{user.username}
+                        <h:outputText value=" (siz)"
+                                      rendered="#{userManagementBean.isCurrentUser(user)}"
+                                      style="color:#27ae60;font-size:12px;"/>
+                    </p:column>
+
+                    <p:column headerText="Tam Ad">
+                        #{user.fullName}
+                    </p:column>
+
+                    <p:column headerText="Rol" style="width:180px;">
+                        <p:selectOneMenu value="#{user.role}" style="width:140px;">
+                            <f:selectItems value="#{userManagementBean.allRoles}"/>
+                            <p:ajax listener="#{userManagementBean.changeRole(user, user.role)}"
+                                    update=":usersForm :growl"/>
+                        </p:selectOneMenu>
+                    </p:column>
+
+                    <p:column headerText="Son Giris" style="width:160px;">
+                        <h:outputText value="#{user.lastLogin}">
+                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm" type="localDateTime"/>
+                        </h:outputText>
+                        <h:outputText value="-" rendered="#{empty user.lastLogin}"/>
+                    </p:column>
+
+                    <p:column headerText="Olusturuldu" style="width:130px;">
+                        <h:outputText value="#{user.createdDate}">
+                            <f:convertDateTime pattern="dd.MM.yyyy" type="localDateTime"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Islemler" style="width:240px;text-align:center;">
+                        <p:commandButton icon="pi pi-key" value="Sifre"
+                                         styleClass="btn btn-sm"
+                                         action="#{userManagementBean.preparePasswordChange(user)}"
+                                         update=":pwdForm" oncomplete="PF('pwdDialog').show();"
+                                         style="margin-right:6px;"/>
+
+                        <p:commandButton icon="pi pi-trash" value="Sil"
+                                         styleClass="btn btn-sm btn-danger"
+                                         action="#{userManagementBean.deleteUser(user)}"
+                                         update=":usersForm :growl"
+                                         disabled="#{userManagementBean.isCurrentUser(user)}"
+                                         title="#{userManagementBean.isCurrentUser(user) ? 'Kendinizi silemezsiniz' : 'Kullaniciyi sil'}">
+                            <p:confirm header="Onay"
+                                       message="#{user.username} kullanicisini silmek istediginize emin misiniz?"
+                                       icon="pi pi-exclamation-triangle"/>
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Evet" type="button"
+                                 styleClass="ui-confirmdialog-yes btn btn-danger"
+                                 icon="pi pi-check"/>
+                <p:commandButton value="Iptal" type="button"
+                                 styleClass="ui-confirmdialog-no btn"
+                                 icon="pi pi-times"/>
+            </p:confirmDialog>
+        </div>
+
+        <!-- ============ SIFRE DEGISTIR DIALOG ============ -->
+        <p:dialog header="Sifre Degistir" widgetVar="pwdDialog" modal="true" closable="true"
+                  width="400" responsive="true">
+            <h:form id="pwdForm">
+                <div style="margin-bottom:14px;">
+                    <strong>#{userManagementBean.passwordChangeUsername}</strong> kullanicisinin yeni sifresini girin:
+                </div>
+                <div>
+                    <label>Yeni Sifre</label>
+                    <p:password value="#{userManagementBean.passwordChangeNewPassword}"
+                                feedback="true" toggleMask="true" required="true"
+                                placeholder="en az 4 karakter" style="width:100%;"/>
+                </div>
+                <div class="actions" style="margin-top:16px;text-align:right;">
+                    <p:commandButton value="Iptal" onclick="PF('pwdDialog').hide();return false;"
+                                     styleClass="btn"/>
+                    <p:commandButton value="Sifreyi Guncelle"
+                                     action="#{userManagementBean.confirmPasswordChange}"
+                                     update=":pwdForm :growl"
+                                     oncomplete="PF('pwdDialog').hide();"
+                                     styleClass="btn btn-success"
+                                     icon="pi pi-check"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>
+</html>

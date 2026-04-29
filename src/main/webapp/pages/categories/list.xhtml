@@ -27,7 +27,8 @@
 
                 <div class="field">
                     <label>Kategori Adi:</label>
-                    <p:inputText value="#{categoryBean.selected.name}" size="30" required="true"/>
+                    <p:inputText value="#{categoryBean.selected.name}" size="30" required="true"
+                                 requiredMessage="Kategori adi zorunlu"/>
                 </div>
 
                 <div class="field">
@@ -38,7 +39,8 @@
                 <p:commandButton value="Kaydet" action="#{categoryBean.save}"
                                  update=":catForm :growl" styleClass="btn btn-primary"/>
                 <p:commandButton value="Yeni" action="#{categoryBean.newCategory}"
-                                 update=":catForm" styleClass="btn"/>
+                                 update=":catForm" styleClass="btn"
+                                 process="@this"/>
             </div>
 
             <h3>Mevcut Kategoriler</h3>
@@ -51,12 +53,17 @@
                 <p:column headerText="Aciklama">#{c.description}</p:column>
                 <p:column headerText="Islem" style="width:180px">
                     <p:commandButton value="Duzenle" styleClass="btn btn-sm"
-                                     action="#{categoryBean.edit(c)}" update=":catForm"/>
+                                     action="#{categoryBean.edit(c)}"
+                                     update=":catForm"
+                                     process="@this"/>
                     &#160;
                     <p:commandButton value="Sil" styleClass="btn btn-sm btn-danger"
-                                     action="#{categoryBean.delete(c.id)}" update=":catForm :growl">
+                                     action="#{categoryBean.delete(c.id)}"
+                                     update=":catForm :growl"
+                                     process="@this">
                         <p:confirm header="Cascade Silme Onayi"
-                                   message="#{categoryBean.getDeletePreview(c.id)}"/>                    </p:commandButton>
+                                   message="#{categoryBean.getDeletePreview(c.id)}"/>
+                    </p:commandButton>
                 </p:column>
             </p:dataTable>
 

@@ -1,38 +1,38 @@
-#
-# WildFly 31 Dockerfile (basitlestirilmis)
-# - Jakarta EE 10
-# - PostgreSQL 42.7.5 JDBC driver modulu
-# - Datasource jboss-cli batch dosyasi ile register ediliyor
-#
+# =============================================================
+#  GlassFish 7 Dockerfile (Jakarta EE 10)
+#  - PostgreSQL 42.7.5 JDBC driver
+#  - Datasource setup runtime'da entrypoint script ile
+# =============================================================
 
-FROM quay.io/wildfly/wildfly:31.0.1.Final-jdk17
+FROM ghcr.io/eclipse-ee4j/glassfish:7.0.25
 
 USER root
 
-# PostgreSQL JDBC driver'i indir
 ENV POSTGRES_VERSION=42.7.5
-RUN mkdir -p ${JBOSS_HOME}/modules/org/postgresql/main && \
-    curl -fSL -o ${JBOSS_HOME}/modules/org/postgresql/main/postgresql-${POSTGRES_VERSION}.jar \
+ENV GF_HOME=/opt/glassfish7
+ENV GF_DOMAIN_DIR=/opt/glassfish7/glassfish/domains/domain1
+
+# 1) Klasorler
+RUN mkdir -p ${GF_DOMAIN_DIR}/lib && \
+    mkdir -p ${GF_DOMAIN_DIR}/autodeploy
+
+# 2) PostgreSQL JDBC driver
+RUN curl -fSL -o ${GF_DOMAIN_DIR}/lib/postgresql-${POSTGRES_VERSION}.jar \
         https://repo1.maven.org/maven2/org/postgresql/postgresql/${POSTGRES_VERSION}/postgresql-${POSTGRES_VERSION}.jar
 
-# Module XML'i kopyala
-COPY docker/postgresql-module.xml ${JBOSS_HOME}/modules/org/postgresql/main/module.xml
+# 3) Setup script + entrypoint
+COPY docker/glassfish-resources.asadmin /opt/glassfish-resources.asadmin
+COPY docker/entrypoint.sh /opt/entrypoint.sh
+RUN chmod +x /opt/entrypoint.sh
 
-# Datasource'u jboss-cli batch ile register et
-COPY docker/datasource.cli /tmp/datasource.cli
-RUN ${JBOSS_HOME}/bin/jboss-cli.sh --file=/tmp/datasource.cli && \
-    rm -f /tmp/datasource.cli
+# 4) WAR
+COPY target/muhasebe-backend.war ${GF_DOMAIN_DIR}/autodeploy/muhasebe-backend.war
 
-# Yonetim kullanicisi
-RUN ${JBOSS_HOME}/bin/add-user.sh admin admin123 --silent
+# 5) KRITIK: WAR kopyalamasindan SONRA chown yap
+#    (her COPY komutu yeni dosyalari root sahipliginde birakir)
+RUN chown -R glassfish:glassfish ${GF_DOMAIN_DIR} && \
+    chown glassfish:glassfish /opt/glassfish-resources.asadmin /opt/entrypoint.sh
 
-# WAR dosyasini deploy et
-COPY target/muhasebe-backend.war ${JBOSS_HOME}/standalone/deployments/
+EXPOSE 8080 4848
 
-RUN chown -R jboss:jboss ${JBOSS_HOME}/standalone/ ${JBOSS_HOME}/modules/
-
-USER jboss
-
-EXPOSE 8080 9990
-
-CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
+ENTRYPOINT ["/opt/entrypoint.sh"]

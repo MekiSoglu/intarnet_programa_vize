@@ -7,14 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-/**
- * Generic CRUD service. Concrete service'ler bunu extend edip kendi repository'sini saglar.
- *
- * BUG FIX (eski koda gore):
- *  - Spring'in @Service yerine subclass'lar @Stateless EJB olacak (ornek: CategoryService).
- *  - Eski koddaki bos if blocklari (existsById sonrasi) kaldirildi -> dogru exception firlatiyor.
- *  - Cache annotation'lari kaldirildi.
- */
+
 public abstract class BaseService<E extends BaseEntity, R extends BaseRepository<E>> {
 
     protected static final Logger log = Logger.getLogger(BaseService.class.getName());

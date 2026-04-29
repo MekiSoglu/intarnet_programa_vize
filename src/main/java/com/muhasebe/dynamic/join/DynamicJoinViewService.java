@@ -17,13 +17,7 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-/**
- * Dinamik View Olusturma + Filtreleme Servisi.
- * * KRITIK DUZELTMELER:
- * 1. "missing FROM-clause" hatasi giderildi: JOIN edilmeyen tablolar artik FROM kismina ekleniyor.
- * 2. fetchFilteredDataFromView metodu eklendi ve CAST(AS TEXT) ile guclendirildi.
- * 3. DROP VIEW IF EXISTS eklendi.
- */
+
 @Stateless
 public class DynamicJoinViewService {
 
@@ -40,6 +34,7 @@ public class DynamicJoinViewService {
 
     @Inject
     private ViewMapService viewMapService;
+    //görünmemesi gereken kolonlar
 
     private static final Set<String> HIDDEN_COLUMN_SUFFIXES = Set.of(
             "_id", "_created_by", "_last_modified_by",
@@ -51,6 +46,7 @@ public class DynamicJoinViewService {
             "last_modified_date", "version", "date_create"
     );
 
+    //dinamik join yapmadan önce hangi tabloların ilişkili olduğu kontorol edilir sonsuz döngüye girmemesi için
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Map<String, Object>> getTableRelations(List<String> tableNames) {
         if (tableNames == null || tableNames.isEmpty()) {
@@ -96,9 +92,8 @@ public class DynamicJoinViewService {
         return m;
     }
 
-    /**
-     * View olusturma mantigi. Tablolar arasi iliski yoksa Cross Join yapar.
-     */
+
+    //tablolar arası ilişki yoksa sanal wiev tablosu kur
     public String createDynamicView(List<String> tableNames,
                                     List<Map<String, Object>> relations,
                                     String rawViewName) {
@@ -201,6 +196,7 @@ public class DynamicJoinViewService {
                  .getResultList();
     }
 
+    //gereksiz kolonarı filtrele
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Map<String, Object>> fetchDataFromView(String rawViewName) {
         String viewName = validator.normalize(rawViewName);
@@ -216,6 +212,7 @@ public class DynamicJoinViewService {
         return convertToMapList(rows, visibleColumns);
     }
 
+    //sanal tabloda dinamik sorgu
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Map<String, Object>> fetchFilteredDataFromView(String rawViewName, String rawColumnName, Object value) {
         String viewName = validator.normalize(rawViewName);

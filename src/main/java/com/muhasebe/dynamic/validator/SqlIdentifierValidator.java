@@ -16,6 +16,7 @@ public class SqlIdentifierValidator {
 
     private static final Pattern IDENTIFIER_PATTERN = Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]{0,62}$");
 
+    //sql injection engeli
     private static final Set<String> RESERVED_KEYWORDS = Set.of(
             "select", "insert", "update", "delete", "drop", "create", "alter", "table",
             "from", "where", "join", "inner", "outer", "left", "right", "on", "as",
@@ -38,6 +39,7 @@ public class SqlIdentifierValidator {
     @PersistenceContext(unitName = "muhasebePU")
     private EntityManager em;
 
+    //geçersiz istekleri filtrele
     public boolean isValid(String identifier) {
         if (identifier == null || identifier.isBlank()) return false;
         if (!IDENTIFIER_PATTERN.matcher(identifier).matches()) return false;
@@ -70,6 +72,7 @@ public class SqlIdentifierValidator {
         }
     }
 
+    //tablo ismi mevcutmu kontorolü
     public boolean tableExists(String tableName) {
         if (!isValid(tableName)) return false;
         Object result = em.createNativeQuery(
@@ -91,6 +94,7 @@ public class SqlIdentifierValidator {
         return Boolean.TRUE.equals(result);
     }
 
+    //türkçe normalizasyon
     public String normalize(String input) {
         if (input == null) return null;
         String normalized = input.trim().toLowerCase()

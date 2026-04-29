@@ -5,9 +5,7 @@ import jakarta.faces.context.FacesContext;
 
 import java.io.IOException;
 
-/**
- * JSF icin ortak yardimci metodlar - mesaj gosterme ve redirect.
- */
+// hata mesajlarını bildirimleri otomatik yönetir
 public final class FacesUtil {
 
     private FacesUtil() {}

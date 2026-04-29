@@ -33,9 +33,7 @@ public class DynamicProcedureService {
     @Inject
     private DynamicProcedureRepository procedureRepository;
 
-    // ============================================================
     //  CREATE PROCEDURE
-    // ============================================================
 
     @SuppressWarnings("unchecked")
     public void createProcedure(Map<String, Object> jsonData) {
@@ -150,9 +148,7 @@ public class DynamicProcedureService {
         return "INTEGER";
     }
 
-    // ============================================================
-    //  EXECUTE PROCEDURE (Düzeltildi)
-    // ============================================================
+    //  EXECUTE PROCEDURE
 
     @SuppressWarnings("unchecked")
     public void executeProcedure(String rawProcedureName, Map<String, Object> params) {
@@ -170,7 +166,7 @@ public class DynamicProcedureService {
         if (inputValues == null) inputValues = Collections.emptyList();
         if (selectedIds == null) selectedIds = Collections.emptyList();
 
-        // 1. DÜZELTME: PostgreSQL'den temizlenmiş tip listesini al
+        // PostgreSQL'den temizlenmiş tip listesini al sql injection riski
         List<String> argTypes = fetchProcedureArgTypes(procedureName);
 
         List<Object> rawValues = new ArrayList<>();
@@ -188,13 +184,14 @@ public class DynamicProcedureService {
             paramValues.add(convertToType(rawValues.get(i), type));
         }
 
-        // 2. DÜZELTME: Placeholder'lara ::cast ekleyerek tip güvenliğini sağla
+        // Placeholder'lara ::cast ekleyerek tip güvenliğini sağla , db den gelen procedur hangi tipleri istediğini kontorol et
         StringJoiner placeholders = new StringJoiner(", ");
         for (int i = 0; i < paramValues.size(); i++) {
             String castType = (i < argTypes.size()) ? sqlCastFor(argTypes.get(i)) : "";
             placeholders.add("?" + castType);
         }
 
+        // bilinmeyen tipleri önler , procedur tip konusunda çok katı
         String callSql = "CALL " + procedureName + "(" + placeholders + ")";
         log.info("CALL EXECUTING: " + callSql + " WITH PARAMS: " + paramValues);
 
@@ -208,7 +205,7 @@ public class DynamicProcedureService {
     private String sqlCastFor(String pgType) {
         if (pgType == null) return "";
         String t = pgType.toLowerCase().trim();
-        // 3. DÜZELTME: contains ile daha esnek yakalama
+        //  contains ile daha esnek yakalama
         if (t.contains("integer") || t.contains("int4"))     return "::integer";
         if (t.contains("bigint") || t.contains("int8"))       return "::bigint";
         if (t.contains("numeric"))                            return "::numeric";
@@ -223,6 +220,9 @@ public class DynamicProcedureService {
         return "";
     }
 
+
+    //metadaya sorgu at procedur bilgilerini almak için, procedur un ihtiyacı olduğu paremetreler dinamik olarak alınır .
+    //frontente dinamik olarak hazır şekilde kayılı işlemin gelmesi
     private List<String> fetchProcedureArgTypes(String procedureName) {
         List<String> types = new ArrayList<>();
         try {
@@ -244,7 +244,7 @@ public class DynamicProcedureService {
                 String trimmed = part.trim();
                 if (trimmed.isEmpty()) continue;
 
-                // 4. DÜZELTME: "param_adi TIP" formatından sadece TIP kısmını ayıkla
+                //  "param_adi TIP" formatından sadece TIP kısmını ayıkla
                 int firstSpace = trimmed.indexOf(' ');
                 if (firstSpace > 0) {
                     types.add(trimmed.substring(firstSpace + 1).trim().toLowerCase());
@@ -266,7 +266,6 @@ public class DynamicProcedureService {
         if (pgType == null) return s;
 
         try {
-            // 5. DÜZELTME: contains ile tip kontrolü
             if (pgType.contains("integer") || pgType.contains("int4")) return Integer.parseInt(s);
             if (pgType.contains("bigint") || pgType.contains("int8")) return Long.parseLong(s);
             if (pgType.contains("numeric") || pgType.contains("decimal") ||
@@ -278,9 +277,8 @@ public class DynamicProcedureService {
         }
     }
 
-    // ============================================================
-    //  METADATA & PARSING (Eski Metotlar Korundu)
-    // ============================================================
+    //metadatan gelen verileri yorumla
+
 
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Map<String, List<String>> getProcedureParameters(String rawProcedureName) {
