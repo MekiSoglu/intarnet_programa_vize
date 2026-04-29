@@ -12,6 +12,7 @@ view'ler üretebilir ve tablolar arası otomatik işlemler (stored procedure) ta
 - **PostgreSQL** (veritabanı)
 - **Maven** (WAR paketleme)
 - **WildFly 31** (uygulama sunucusu)
+- **glassfish
 
 ## Kurulum Adımları
 
@@ -50,11 +51,6 @@ docker compose logs -f wildfly
 docker compose logs -f postgres
 ```
 
-WildFly'ın deploy'u bitince şu mesajı göreceksin:
-```
-WFLYSRV0010: Deployed "muhasebe-backend.war"
-```
-
 ### Kod Değişikliği Sonrası Yeniden Deploy
 
 ```bash
@@ -86,11 +82,7 @@ docker compose exec postgres psql -U postgres -d muhasebedb
 - User: `postgres`
 - Password: `postgres`
 
-### WildFly Yönetim Konsolu (Opsiyonel)
 
-<http://localhost:9990/>
-- Kullanıcı: `admin`
-- Şifre: `admin123`
 
 ### Docker Olmadan Çalıştırma (Manuel Kurulum)
 
